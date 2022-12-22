@@ -1,3 +1,5 @@
+import CardRenderer from "../../components/card/CardRenderer";
+import CardsRenderer from "../../components/card/CardsRenderer";
 import Shop from "./Shop";
 
 export default {
@@ -5,6 +7,11 @@ export default {
   title: "shop/Shop",
 };
 
-const Template = () => <Shop />;
+const Template = () => (
+  <>
+    <CardsRenderer cards={[]} />
+    <Shop />
+  </>
+);
 
 export const Primary = Template.bind({});

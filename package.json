@@ -1,31 +1,13 @@
 {
-  "name": "gametest",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@craco/craco": "^6.4.1",
-    "@reduxjs/toolkit": "^1.6.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-icons": "^4.3.1",
-    "react-scripts": "4.0.3",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
-  },
+  "name": "gametest-vite",
+  "version": "0.0.0",
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "dev": "vite",
+    "test": "jest",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "eslintConfig": {
     "extends": [
@@ -43,27 +25,54 @@
       }
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.4",
+    "react": "^17.0.0",
+    "react-dnd": "^14.0.4",
+    "react-dnd-html5-backend": "^14.0.2",
+    "react-dom": "^17.0.0",
+    "react-icons": "^4.3.1",
+    "tailwindcss": "^2.2.19"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.4.0",
-    "@storybook/addon-essentials": "^6.4.0",
-    "@storybook/addon-links": "^6.4.0",
-    "@storybook/node-logger": "^6.4.0",
-    "@storybook/preset-create-react-app": "^3.2.0",
-    "@storybook/react": "^6.4.0",
-    "autoprefixer": "^9.8.8",
-    "postcss": "^7.0.39",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@storybook/addon-actions": "^6.4.1",
+    "@storybook/addon-essentials": "^6.4.1",
+    "@storybook/addon-links": "^6.4.1",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/react": "^6.4.1",
+    "@testing-library/dom": "^8.11.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.0.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@vitejs/plugin-react": "^1.0.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.2.3",
+    "babel-preset-react-app": "^10.0.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-tailwindcss": "^1.17.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "jest-circus": "^27.4.2",
+    "jest-scss-transform": "^1.0.1",
+    "jest-watch-typeahead": "^1.0.0",
+    "prettier": "^2.5.1",
+    "storybook-builder-vite": "^0.1.10",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.4"
   }
 }

@@ -23,7 +23,7 @@ const makeCardSlot = (id: slotId, card: card): cardSlot => {
   };
 };
 
-const slotId = undefined;
+const defaultSlotId = undefined;
 
 describe("inventorySlice", () => {
   describe("buyCard", () => {
@@ -34,10 +34,10 @@ describe("inventorySlice", () => {
         ...initialState,
         gold: 10,
         spirit: 5,
-        shop: [makeCardSlot("shop_1", card)],
+        shop: [makeCardSlot(["shop", "1"], card)],
       };
 
-      const result = reducer(state, buyCard({ card, slotId }));
+      const result = reducer(state, buyCard({ card, slotId: defaultSlotId }));
 
       expect(result).toEqual({
         ...initialState,
@@ -45,7 +45,7 @@ describe("inventorySlice", () => {
         spirit: 1,
         shop: [],
         bench: initialState.bench.map((b) =>
-          b.id === "bench_1" ? { ...b, card } : b
+          b.id === ["bench", "1"] ? { ...b, card } : b
         ),
       });
     });
@@ -56,10 +56,10 @@ describe("inventorySlice", () => {
       const state: sliceState = {
         ...initialState,
         gold: 1,
-        shop: [makeCardSlot("shop_1", card)],
+        shop: [makeCardSlot(["shop", "1"], card)],
       };
 
-      const result = reducer(state, buyCard({ card, slotId }));
+      const result = reducer(state, buyCard({ card, slotId: defaultSlotId }));
 
       expect(result).toEqual({
         ...state,
@@ -72,10 +72,10 @@ describe("inventorySlice", () => {
       const state: sliceState = {
         ...initialState,
         spirit: 1,
-        shop: [makeCardSlot("shop_1", card)],
+        shop: [makeCardSlot(["shop", "1"], card)],
       };
 
-      const result = reducer(state, buyCard({ card, slotId }));
+      const result = reducer(state, buyCard({ card, slotId: defaultSlotId }));
 
       expect(result).toEqual({
         ...state,
@@ -89,16 +89,19 @@ describe("inventorySlice", () => {
         ...initialState,
         spirit: 1,
         gold: 1,
-        shop: [makeCardSlot("shop_1", shopCard)],
+        shop: [makeCardSlot(["shop", "1"], shopCard)],
         bench: [
           {
-            id: "bench_1",
+            id: ["bench", "1"],
             card: makeCard(6, 1, 1),
           },
         ],
       };
 
-      const result = reducer(state, buyCard({ card: shopCard, slotId }));
+      const result = reducer(
+        state,
+        buyCard({ card: shopCard, slotId: defaultSlotId })
+      );
 
       expect(result).toEqual({
         ...state,
@@ -115,7 +118,7 @@ describe("inventorySlice", () => {
         shop: [],
       };
 
-      const result = reducer(state, buyCard({ card, slotId }));
+      const result = reducer(state, buyCard({ card, slotId: defaultSlotId }));
 
       expect(result).toEqual({
         ...state,
@@ -131,11 +134,11 @@ describe("inventorySlice", () => {
         ...initialState,
         bench: [
           {
-            id: "bench_1",
+            id: ["bench", "1"],
             card: card1,
           },
           {
-            id: "bench_2",
+            id: ["bench", "2"],
             card: card2,
           },
         ],
@@ -143,18 +146,18 @@ describe("inventorySlice", () => {
 
       const result = reducer(
         state,
-        moveCard({ card: card1, slotId: "bench_2" })
+        moveCard({ card: card1, slotId: ["bench", "2"] })
       );
 
       expect(result).toEqual({
         ...initialState,
         bench: [
           {
-            id: "bench_1",
+            id: ["bench", "1"],
             card: card2,
           },
           {
-            id: "bench_2",
+            id: ["bench", "2"],
             card: card1,
           },
         ],

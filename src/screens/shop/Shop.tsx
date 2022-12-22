@@ -3,13 +3,18 @@ import { GiBrokenSkull } from "react-icons/gi";
 import CardSlot from "../../components/card/CardSlot";
 import { slotId } from "../../model/entities/cardSlot";
 
-const slotIds: slotId[] = ["shop_1", "shop_2", "shop_3", "shop_4"];
+const slotIds: slotId[] = [
+  ["shop", "1"],
+  ["shop", "2"],
+  ["shop", "3"],
+  ["shop", "4"],
+];
 
 const Shop = () => {
   return (
     <div className="p-4">
       {slotIds.map((i) => (
-        <CardSlot id={i} />
+        <CardSlot key={i?.join("-")} id={i} onDrop={(_card, _slotId) => {}} />
       ))}
     </div>
   );

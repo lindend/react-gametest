@@ -8,7 +8,7 @@ export default {
 
 const cards: cardSlot[] = [
   {
-    id: "shop_1",
+    id: ["shop", "1"],
     card: {
       id: 1,
       name: "test",
@@ -17,9 +17,9 @@ const cards: cardSlot[] = [
     },
   },
   {
-    id: "shop_2",
+    id: ["shop", "2"],
     card: {
-      id: 1,
+      id: 2,
       name: "test2",
       costGold: 1,
       costSpirit: 1,

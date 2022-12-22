@@ -21,11 +21,11 @@ export const initialState: sliceState = {
 
   bench: [
     {
-      id: "bench_1",
+      id: ["bench", "1"],
       card: undefined,
     },
     {
-      id: "bench_2",
+      id: ["bench", "2"],
       card: undefined,
     },
   ],
@@ -41,9 +41,9 @@ const inventorySlice = createSlice({
     },
     buyCard: (
       state,
-      { payload }: PayloadAction<{ card: card; slotId: slotId }>
+      { payload }: PayloadAction<{ card: card; targetSlotId: slotId }>
     ) => {
-      const { card, slotId } = payload;
+      const { card, targetSlotId } = payload;
 
       if (card.costGold > state.gold) {
         return;
@@ -54,7 +54,7 @@ const inventorySlice = createSlice({
       }
 
       const benchSlot = state.bench.find((b) =>
-        slotId ? b.id === slotId : !b.card
+        targetSlotId ? b.id === targetSlotId : !b.card
       );
 
       if (!benchSlot) {
@@ -65,10 +65,10 @@ const inventorySlice = createSlice({
         return;
       }
 
-      state.shop = state.shop.map((shopCard) =>
-        shopCard.card?.id === card.id
-          ? { ...shopCard, card: undefined }
-          : shopCard
+      state.shop = state.shop.map((shopCardSlot) =>
+        shopCardSlot.card?.id === card.id
+          ? { ...shopCardSlot, card: undefined }
+          : shopCardSlot
       );
       benchSlot.card = card;
       state.gold -= card.costGold;

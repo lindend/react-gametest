@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+import { useDragLayer } from "react-dnd";
+import { card } from "../../model/entities/card";
 import { cardSlot } from "../../model/entities/cardSlot";
 import CardRenderer from "./CardRenderer";
 
@@ -11,7 +13,12 @@ const CardsRenderer = ({ cards }: CardsRendererProps) => {
     <>
       {cards.map((slot) =>
         slot.card ? (
-          <CardRenderer card={slot.card} slotId={slot.id} />
+          <CardRenderer
+            key={slot.card.id}
+            card={slot.card}
+            slotId={slot.id}
+            canDrag={true}
+          />
         ) : (
           <Fragment />
         )
