@@ -1,14 +1,15 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import "./App.css";
-import Shop from "./screens/shop/Shop";
+import GameBoard from "./screens/Game/GameBoard";
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 function App() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
-        <Shop></Shop>
-      </div>
+      <Provider store={store}>
+        <GameBoard />
+      </Provider>
     </DndProvider>
   );
 }

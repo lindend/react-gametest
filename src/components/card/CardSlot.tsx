@@ -1,28 +1,17 @@
-import { useDrop } from "react-dnd";
-import { card } from "../../model/entities/card";
-import { slotId } from "../../model/entities/cardSlot";
+import { elementId, slotId } from "../../model/entities/cardSlot";
 
 type CardSlotProps = {
   id: slotId;
-  onDrop: (card: card, slotId: slotId) => void;
+  zIndex: number;
+  angle: number;
 };
 
-const CardSlot = ({ id, onDrop }: CardSlotProps) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: "Card",
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-    drop: (item) => onDrop(item as card, id),
-  }));
-
+const CardSlot = ({ id, zIndex, angle }: CardSlotProps) => {
   return (
     <div
-      id={id?.join("-")}
-      ref={drop}
-      className={`rounded relative border-2 border-dashed border-gray-400 shadow-lg inline-flex flex-col ${
-        isOver ? "bg-blue-200" : "bg-gray-100"
-      } p-1 gap-1 w-48 h-60`}
+      id={elementId(id)}
+      style={{zIndex: zIndex, rotate: `${angle}deg`}}
+      className="relative p-1 gap-1 h-40 border-2 border-red-600 border-dashed"
     ></div>
   );
 };
