@@ -4,8 +4,8 @@ import { GiBrokenSkull } from "react-icons/gi";
 import { card } from "../../model/entities/card";
 import { elementId, slotId } from "../../model/entities/cardSlot";
 import Card from "./BaseCard";
-import type { RootState } from '../../store';
-import { useSelector } from 'react-redux';
+import type { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 export type CardRendererProps = {
   card: card;
@@ -26,10 +26,12 @@ const CardRenderer = (props: CardRendererProps) => {
     canDrag: () => canDrag,
   }));
 
-  let slotPosition = useSelector((state: RootState) => state.cards.slotPositions[elementId(slotId)]);
+  let slotPosition = useSelector(
+    (state: RootState) => state.cards.slotPositions[elementId(slotId)]
+  );
 
   if (!slotPosition) {
-    return (<Fragment />);
+    return <Fragment />;
   }
 
   const style = {
@@ -37,7 +39,7 @@ const CardRenderer = (props: CardRendererProps) => {
     rotate: slotPosition.rotation,
     zIndex: slotPosition.zIndex,
   };
-  
+
   return (
     <div
       ref={dragRef}
