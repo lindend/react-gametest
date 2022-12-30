@@ -1,11 +1,11 @@
-import { Fragment, useEffect, useState } from "react";
-import { useDrag } from "react-dnd";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { GiBrokenSkull } from "react-icons/gi";
 import { card } from "../../model/entities/card";
-import { elementId, slotId } from "../../model/entities/cardSlot";
+import { elementId, mouseSlot, slotId } from "../../model/entities/cardSlot";
 import Card from "./BaseCard";
 import type { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsDragging } from "../../model/cardSlice";
 
 export type CardRendererProps = {
   card: card;
@@ -17,17 +17,21 @@ export type CardRendererProps = {
 const CardRenderer = (props: CardRendererProps) => {
   const { card, slotId, canDrag } = props;
 
-  const [{ isDragging }, dragRef] = useDrag(() => ({
-    type: "Card",
-    item: card,
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    canDrag: () => canDrag,
-  }));
+  const dispatch = useDispatch();
+
+  const [isDragging, setCardDragging] = useState(false);
+
+  const setDragging = useCallback(
+    (isDragging: boolean, mouseX: number, mouseY: number) => {
+      dispatch(setIsDragging({ isDragging, mouseX, mouseY }));
+      setCardDragging(isDragging);
+    },
+    []
+  );
 
   let slotPosition = useSelector(
-    (state: RootState) => state.cards.slotPositions[elementId(slotId)]
+    (state: RootState) =>
+      state.cards.slotPositions[elementId(isDragging ? mouseSlot : slotId)]
   );
 
   if (!slotPosition) {
@@ -42,7 +46,6 @@ const CardRenderer = (props: CardRendererProps) => {
 
   return (
     <div
-      ref={dragRef}
       className={`
         absolute 
         top-0 left-0
@@ -51,21 +54,19 @@ const CardRenderer = (props: CardRendererProps) => {
         w-0
         flex
         justify-center
-        transition-all
+        ${!isDragging ? "transition-all" : "align-middle"}
         `}
       style={style}
     >
-      {!isDragging ? (
-        <Card
-          name={card.name}
-          icon={<GiBrokenSkull />}
-          description={"Yes, this is test"}
-          costGold={card.costGold}
-          costSpirit={card.costSpirit}
-        />
-      ) : (
-        <Fragment />
-      )}
+      <Card
+        name={card.name}
+        icon={<GiBrokenSkull />}
+        description={"Yes, this is test"}
+        costGold={card.costGold}
+        costSpirit={card.costSpirit}
+        onMouseDown={(ev) => setDragging(true, ev.clientX, ev.clientY)}
+        onMouseUp={(ev) => setDragging(false, ev.clientX, ev.clientY)}
+      />
     </div>
   );
 };

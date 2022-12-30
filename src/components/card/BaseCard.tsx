@@ -1,5 +1,6 @@
 import { IconContext } from "react-icons/lib";
 import { GiTwoCoins, GiPrayerBeads } from "react-icons/gi";
+import { HTMLAttributes } from "react";
 
 type CardProps = {
   name: string;
@@ -9,8 +10,18 @@ type CardProps = {
   costSpirit: number;
 };
 
-const Card = ({ name, icon, description, costGold, costSpirit }: CardProps) => (
-  <div className="rounded relative border-4 border-gray-700 shadow-lg flex-shrink-0 inline-flex flex-col bg-gray-100 p-1 gap-1 w-30 h-40 select-none">
+const Card = ({
+  name,
+  icon,
+  description,
+  costGold,
+  costSpirit,
+  ...rest
+}: CardProps & HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className="rounded relative border-4 border-gray-700 shadow-lg flex-shrink-0 inline-flex flex-col bg-gray-100 p-1 gap-1 w-30 h-40 select-none"
+    {...rest}
+  >
     <div className="flex justify-between">
       <h5>{name}</h5>
       <div className="flex items-end">

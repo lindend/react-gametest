@@ -5,6 +5,7 @@ import type { RootState } from "../../store";
 import { addCard } from "../../model/cardSlice";
 import "./gameboard.css";
 import { PlayerBoard } from "../../components/card/PlayerBoard";
+import { MouseSlotPositionTracker } from "../../components/card/MouseSlotPositionTracker";
 
 const randomCard = () => ({
   id: Math.floor(Math.random() * 100000),
@@ -29,6 +30,7 @@ const GameBoard = () => {
   return (
     <>
       <SlotPositionTracker />
+      <MouseSlotPositionTracker />
       <div className="gameboard w-full h-full">
         <button onClick={addCardAction}>Add card</button>
         <div
