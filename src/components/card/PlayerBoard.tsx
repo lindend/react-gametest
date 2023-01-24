@@ -1,5 +1,35 @@
 import { HTMLAttributes } from "react";
+import { useSelector } from "react-redux";
+import { cardSlotId } from "../../model/entities/card";
+import { dropTarget } from "../../model/entities/dropTarget";
+import { players } from "../../model/gameSlice";
+import { RootState } from "../../store";
+import CardSlot from "./CardSlot";
+import { SlotPositionTracker } from "./SlotPositionTracker";
 
 export const PlayerBoard = (props: HTMLAttributes<HTMLDivElement>) => {
-  return <div className="bg-slate-300" {...props}></div>;
+  const cards = useSelector(
+    (state: RootState) => state.game.players[players.player].board
+  );
+  return (
+    <div
+      className="bg-slate-300"
+      {...props}
+      drop-target={dropTarget.playerBoard}
+    >
+      <SlotPositionTracker cards={cards} />
+      <div className="flex flex-row justify-center w-full px-16" {...props}>
+        {cards.map((card) => (
+          <div className="w-44">
+            <CardSlot
+              key={card.id}
+              id={cardSlotId(card)}
+              zIndex={0}
+              angle={0}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };

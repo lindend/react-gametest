@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { card } from "./entities/card";
-import { elementId, mouseSlot, slotId } from "./entities/cardSlot";
-import { numberOfCardsInShop } from "./inventorySlice";
+
+export const mouseSlot = "slot-mouse";
 
 export interface slotPosition {
   x: number;
@@ -13,47 +12,35 @@ export interface slotPosition {
 }
 
 export type sliceState = {
-  cards: card[];
-  cardSlots: { [id: string]: slotId };
   slotPositions: { [id: string]: slotPosition };
   isDragging: boolean;
 };
 
 export const initialState: sliceState = {
-  cards: [],
-  cardSlots: {},
   slotPositions: {},
   isDragging: false,
 };
 
-const cardSlice = createSlice({
-  name: "cards",
+const cardSlotSlice = createSlice({
+  name: "cardSlots",
   initialState,
   reducers: {
-    addCard: (
+    setSlotPositions: (
       state,
-      { payload }: PayloadAction<{ card: card; slot: slotId }>
+      { payload }: PayloadAction<{ id: string; position: slotPosition }[]>
     ) => {
-      state.cards = [...state.cards, payload.card];
-      state.cardSlots[payload.card.id] = payload.slot;
+      for (let i of payload) {
+        state.slotPositions[i.id] = i.position;
+      }
     },
-    setCardSlot: (
-      state,
-      { payload }: PayloadAction<{ card: card; slot: slotId }>
-    ) => {
-      state.cardSlots[payload.card.id] = payload.slot;
-    },
-    setSlotPosition: (
-      state,
-      { payload }: PayloadAction<{ slotId: slotId; position: slotPosition }>
-    ) => {
-      state.slotPositions[elementId(payload.slotId)] = payload.position;
+    removeSlotPosition: (state, { payload }: PayloadAction<{ id: string }>) => {
+      delete state.slotPositions[payload.id];
     },
     setMousePosition: (
       state,
       { payload }: PayloadAction<{ mouseX: number; mouseY: number }>
     ) => {
-      state.slotPositions[elementId(mouseSlot)] = {
+      state.slotPositions[mouseSlot] = {
         x: payload.mouseX,
         y: payload.mouseY,
         width: 0,
@@ -75,7 +62,7 @@ const cardSlice = createSlice({
       state.isDragging = payload.isDragging;
 
       if (payload.mouseX && payload.mouseY) {
-        state.slotPositions[elementId(mouseSlot)] = {
+        state.slotPositions[mouseSlot] = {
           x: payload.mouseX,
           y: payload.mouseY,
           width: 0,
@@ -88,7 +75,11 @@ const cardSlice = createSlice({
   },
 });
 
-export const { addCard, setSlotPosition, setMousePosition, setIsDragging } =
-  cardSlice.actions;
+export const {
+  setSlotPositions,
+  removeSlotPosition,
+  setMousePosition,
+  setIsDragging,
+} = cardSlotSlice.actions;
 
-export default cardSlice.reducer;
+export default cardSlotSlice.reducer;

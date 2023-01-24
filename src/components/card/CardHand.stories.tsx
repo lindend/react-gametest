@@ -3,7 +3,7 @@ import { Story } from "@storybook/react";
 import { card } from "../../model/entities/card";
 import { slotId } from "../../model/entities/cardSlot";
 import CardHand from "./CardHand";
-import CardRenderer, { CardRendererProps } from "./CardRenderer";
+import CardPositioning, { CardPositioningProps } from "./CardPositioning";
 
 export default {
   component: CardHand,
@@ -17,23 +17,21 @@ const card1: card = {
   costSpirit: 1,
 };
 
-let cards = [
-  card1
-]
+let cards = [card1];
 
-const defaultArgs: CardRendererProps = {
+const defaultArgs: CardPositioningProps = {
   card: card1,
   slotId: new slotId("shop", "1"),
   canDrag: true,
 };
 
-const Template: Story<CardRendererProps> = (args) => {
+const Template: Story<CardPositioningProps> = (args) => {
   const [_, updateArgs] = useArgs();
 
   return (
     <div>
       <CardHand cards={cards} />
-      <CardRenderer {...args} />
+      <CardPositioning {...args} />
     </div>
   );
 };

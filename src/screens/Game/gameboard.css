@@ -4,9 +4,9 @@
     "opp-hp opp-hand opp-hand opp-deck" 1fr
     "opp-energy opp-hand opp-hand opp-deck" 1fr
     "opp-board opp-board opp-board opp-board" 2fr
-    "mid-divider mid-divider mid-divider end-turn" 20px
+    "mid-divider mid-divider mid-divider mid-divider" 5px
     "player-board player-board player-board player-board" 2fr
-    "player-hp player-hand player-hand player-deck" 1fr
+    "player-hp player-hand player-hand end-turn" 1fr
     "player-energy player-hand player-hand player-deck" 1fr
     / 1fr 2fr 2fr 1fr;
 }

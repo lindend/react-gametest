@@ -1,6 +1,7 @@
-export type card = {
+import { cardTemplate } from "./cardTemplate";
+
+export interface card extends cardTemplate {
   id: number;
-  costGold: number;
-  costSpirit: number;
-  name: string;
-};
+}
+
+export const cardSlotId = (card: card) => `card-${card.id}`;

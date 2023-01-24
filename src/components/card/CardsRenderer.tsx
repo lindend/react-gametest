@@ -1,27 +1,28 @@
 import { Fragment } from "react";
-import { cardSlot } from "../../model/entities/cardSlot";
-import CardRenderer from "./CardRenderer";
+import { useSelector } from "react-redux";
+import { players } from "../../model/gameSlice";
+import { RootState } from "../../store";
+import CardPositioning from "./CardPositioning";
 
-type CardsRendererProps = {
-  cards: cardSlot[];
-};
+const CardsRenderer = () => {
+  const handCards = useSelector(
+    (state: RootState) => state.game.players[players.player].hand
+  );
+  const playerBoardCards = useSelector(
+    (state: RootState) => state.game.players[players.player].board
+  );
+  const opponentBoardCards = useSelector(
+    (state: RootState) => state.game.players[players.opponent].board
+  );
 
-const CardsRenderer = ({ cards }: CardsRendererProps) => {
+  const cards = handCards.concat(playerBoardCards).concat(opponentBoardCards);
+
   return (
-    <>
-      {cards.map((slot) =>
-        slot.card ? (
-          <CardRenderer
-            key={slot.card.id}
-            card={slot.card}
-            slotId={slot.id}
-            canDrag={true}
-          />
-        ) : (
-          <Fragment />
-        )
-      )}
-    </>
+    <div id="cards-renderer">
+      {cards.map((card, i) => (
+        <CardPositioning key={card.id} card={card}></CardPositioning>
+      ))}
+    </div>
   );
 };
 

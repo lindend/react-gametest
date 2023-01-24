@@ -1,4 +1,4 @@
-import CardRenderer from "../../components/card/CardRenderer";
+import CardPositioning from "../../components/card/CardPositioning";
 import CardsRenderer from "../../components/card/CardsRenderer";
 import Shop from "./Shop";
 

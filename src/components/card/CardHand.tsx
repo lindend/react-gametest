@@ -1,10 +1,10 @@
-import { card } from "../../model/entities/card";
-import { elementId, slotId } from "../../model/entities/cardSlot";
-import CardRenderer from "./CardRenderer";
+import { card, cardSlotId as cardSlotId } from "../../model/entities/card";
 import CardSlot from "./CardSlot";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { HTMLAttributes } from "react";
+import { players } from "../../model/gameSlice";
+import { SlotPositionTracker } from "./SlotPositionTracker";
 
 const maxCardAngleFullHand = 8;
 
@@ -15,7 +15,7 @@ const CardHandSlot = ({
   unitCircleLength,
 }: {
   i: number;
-  id: slotId;
+  id: string;
   angle: number;
   unitCircleLength: number;
 }) => {
@@ -35,19 +35,23 @@ function lerp(min: number, max: number, progress: number): number {
 }
 
 const CardHand = (props: HTMLAttributes<HTMLDivElement>) => {
-  const cards = useSelector((state: RootState) => state.cards.cards);
-  const cardSlots = useSelector((state: RootState) => state.cards.cardSlots);
+  const cards = useSelector(
+    (state: RootState) => state.game.players[players.player].hand
+  );
   const cardSlotPositions = useSelector(
-    (state: RootState) => state.cards.slotPositions
+    (state: RootState) => state.cardSlots.slotPositions
   );
 
-  const numCardSlots = Object.keys(cardSlots).length;
+  const handSlotPositions = cards
+    .map((card) => cardSlotPositions[cardSlotId(card)])
+    .filter((slot) => !!slot);
+  const numCardSlots = cards.length;
   const maxCardAngle = lerp(3, maxCardAngleFullHand, cards.length / 10);
-  const minCardX = Object.values(cardSlotPositions).reduce(
+  const minCardX = Object.values(handSlotPositions).reduce(
     (prev, curr) => Math.min(prev, curr.x),
     0
   );
-  const maxCardX = Object.values(cardSlotPositions).reduce(
+  const maxCardX = Object.values(handSlotPositions).reduce(
     (prev, curr) => Math.max(prev, curr.x),
     0
   );
@@ -55,25 +59,18 @@ const CardHand = (props: HTMLAttributes<HTMLDivElement>) => {
     (maxCardX - minCardX) / (2 * Math.sin((maxCardAngle / 180) * Math.PI));
   return (
     <>
+      <SlotPositionTracker cards={cards} />
       <div className="flex flex-row justify-center w-full px-16" {...props}>
-        {Object.values(cardSlots).map((slotId, i) => (
+        {cards.map((card, i) => (
           <CardHandSlot
-            key={elementId(slotId)}
-            id={slotId}
+            key={card.id}
+            id={cardSlotId(card)}
             i={i}
             unitCircleLength={unitCircleLength}
             angle={lerp(-maxCardAngle, maxCardAngle, i / (numCardSlots - 1))}
           />
         ))}
       </div>
-      {cards.map((card, i) => (
-        <CardRenderer
-          canDrag={true}
-          key={card.id}
-          slotId={cardSlots[card.id]}
-          card={card}
-        ></CardRenderer>
-      ))}
     </>
   );
 };

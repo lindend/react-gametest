@@ -1,7 +1,5 @@
-import { elementId, slotId } from "../../model/entities/cardSlot";
-
 type CardSlotProps = {
-  id: slotId;
+  id: string;
   zIndex: number;
   angle: number;
 };
@@ -9,7 +7,7 @@ type CardSlotProps = {
 const CardSlot = ({ id, zIndex, angle }: CardSlotProps) => {
   return (
     <div
-      id={elementId(id)}
+      id={id}
       style={{ zIndex: zIndex, rotate: `${angle}deg` }}
       className="relative p-1 gap-1 h-40 border-2 border-red-600 border-dashed"
     ></div>
