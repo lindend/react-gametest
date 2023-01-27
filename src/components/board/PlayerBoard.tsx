@@ -4,8 +4,8 @@ import { cardSlotId } from "../../model/entities/card";
 import { dropTarget } from "../../model/entities/dropTarget";
 import { players } from "../../model/gameSlice";
 import { RootState } from "../../store";
-import CardSlot from "./CardSlot";
-import { SlotPositionTracker } from "./SlotPositionTracker";
+import CardSlot from "../card/CardSlot";
+import { SlotPositionTracker } from "../card/SlotPositionTracker";
 
 export const PlayerBoard = (props: HTMLAttributes<HTMLDivElement>) => {
   const cards = useSelector(
@@ -13,7 +13,7 @@ export const PlayerBoard = (props: HTMLAttributes<HTMLDivElement>) => {
   );
   return (
     <div
-      className="bg-slate-300"
+      className="bg-slate-300 opacity-40"
       {...props}
       drop-target={dropTarget.playerBoard}
     >

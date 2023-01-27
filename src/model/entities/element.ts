@@ -1,5 +1,3 @@
-import { elementsRoot } from "../../contentPaths";
-
 export enum element {
   fire,
   life,
@@ -32,5 +30,3 @@ const elements: { [key in element]: elementInfo } = {
 };
 
 export const elementName = (element: element) => elements[element].name;
-export const elementIcon = (element: element) =>
-  `${elementsRoot}/${elements[element].icon}`;

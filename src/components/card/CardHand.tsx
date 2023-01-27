@@ -60,7 +60,10 @@ const CardHand = (props: HTMLAttributes<HTMLDivElement>) => {
   return (
     <>
       <SlotPositionTracker cards={cards} />
-      <div className="flex flex-row justify-center w-full px-16" {...props}>
+      <div
+        className="flex flex-row justify-center w-full px-16 overflow-hidden"
+        {...props}
+      >
         {cards.map((card, i) => (
           <CardHandSlot
             key={card.id}

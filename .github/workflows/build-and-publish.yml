@@ -1,0 +1,33 @@
+name: build-and-publish
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "19.x"
+
+      - name: Install deps
+        run: npm install
+
+      - name: Build
+        run: num run build
+
+      - name: Create artifact from dist folder
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v1.2.3

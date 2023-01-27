@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: VT323;
+  src: url("../fonts/VT323-Regular.ttf");
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+img {
+  image-rendering: pixelated;
+}
