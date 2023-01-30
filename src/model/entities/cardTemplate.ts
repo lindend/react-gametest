@@ -1,6 +1,12 @@
+import { element } from "./element";
+
+export interface cardCost {
+  amount: number;
+  element: element;
+}
+
 export interface cardTemplate {
-  costGold: number;
-  costSpirit: number;
+  cost: cardCost[];
   name: string;
   icon: string;
   description: string;

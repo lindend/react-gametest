@@ -1,24 +1,22 @@
-import { IconContext } from "react-icons/lib";
-import { GiTwoCoins, GiPrayerBeads } from "react-icons/gi";
-import { HTMLAttributes } from "react";
+import { Fragment, HTMLAttributes } from "react";
 import { card } from "../../model/entities/card";
 import cardFrameUrl from "../../../art/board/cardframe.png";
+import cardBackUrl from "../../../art/board/cardback.png";
+import { ElementIcon } from "./icons/ElementIcon";
+
+export enum cardFacing {
+  front,
+  back,
+}
 
 type CardProps = {
   card: card;
+  facing: cardFacing;
 };
 
-const Card = ({
-  card,
-  ...rest
-}: CardProps & HTMLAttributes<HTMLDivElement>) => {
-  const { name, icon, description, costGold, costSpirit } = card;
-
+const CardFront = ({ name, icon, description, cost }: card) => {
   return (
-    <div
-      className="shadow-lg flex-shrink-0 inline-flex flex-col p-2 gap-1 w-40 h-60 select-none relative"
-      {...rest}
-    >
+    <>
       <div className="flex justify-between items-center h-3">
         <div className="h-full flex-grow">
           <span className="text-white">{name}</span>
@@ -36,32 +34,44 @@ const Card = ({
             </text>
           </svg> */}
         </div>
-        <div className="flex items-center">
-          {costGold}
-          <div className="text-yellow-600">
-            <GiTwoCoins />
-          </div>
-          {costSpirit}
-          <span className="text-blue-600">
-            <GiPrayerBeads />
-          </span>
+        <div>
+          {cost.map((c, i) => (
+            <div className="flex items-center" key={i}>
+              {c.amount}
+              <ElementIcon e={c.element} />
+            </div>
+          ))}
         </div>
       </div>
       <div
         className="h-1/2 border-2 border-gray-400 shadow-inner bg-gray-200 p-1"
         style={{
-          background: `no-repeat center/cover url(${card.icon})`,
+          background: `no-repeat center/cover url(${icon})`,
         }}
       ></div>
       <div className="flex-1 border-2 border-gray-400 shadow-inner bg-gray-200 p-1 rounded-b-xl">
         {description}
       </div>
+    </>
+  );
+};
+
+export const Card = ({
+  card,
+  facing,
+  ...rest
+}: CardProps & HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className="drop-shadow-md hover:drop-shadow-lg transition-all flex-shrink-0 inline-flex flex-col p-2 gap-1 w-card h-card select-none relative"
+      {...rest}
+    >
+      {facing == cardFacing.front ? <CardFront {...card} /> : <Fragment />}
       <img
-        src={cardFrameUrl}
+        src={facing == cardFacing.front ? cardFrameUrl : cardBackUrl}
+        draggable="false"
         className="absolute w-full h-full inset-0 -z-10"
       />
     </div>
   );
 };
-
-export default Card;

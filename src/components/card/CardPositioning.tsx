@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { card, cardSlotId } from "../../model/entities/card";
-import Card from "./Card";
+import { Card, cardFacing } from "./Card";
 import type { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { mouseSlot, setIsDragging } from "../../model/cardSlotSlice";
@@ -8,6 +8,7 @@ import { dropCard } from "../../model/gameSlice";
 
 export type CardPositioningProps = {
   card: card;
+  facing: cardFacing;
 };
 
 function getDroppable(x: number, y: number): string[] {
@@ -25,7 +26,7 @@ function getDroppable(x: number, y: number): string[] {
 }
 
 const CardPositioning = (props: CardPositioningProps) => {
-  const { card } = props;
+  const { card, facing } = props;
 
   const dispatch = useDispatch();
 
@@ -78,6 +79,7 @@ const CardPositioning = (props: CardPositioningProps) => {
     >
       <Card
         card={card}
+        facing={facing}
         onMouseDown={(ev) => startDrag(ev.clientX, ev.clientY)}
         onMouseUp={(ev) => stopDragging(ev.clientX, ev.clientY)}
       />

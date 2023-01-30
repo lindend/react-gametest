@@ -4,6 +4,8 @@ import { element } from "./entities/element";
 
 export interface gameState {
   health: number;
+  maxHealth: number;
+  portraitUrl: string;
   elements: element[];
   elementEnergy: number[];
   surgingElement: number;
@@ -30,6 +32,8 @@ export type sliceState = {
 
 export const initialGameState: gameState = {
   health: 0,
+  maxHealth: 0,
+  portraitUrl: "",
   elements: [],
   elementEnergy: [],
   surgingElement: 0,
@@ -82,6 +86,11 @@ const gameSlice = createSlice({
     },
     endTurn: (state) => {
       const player = state.players[state.currentTurn];
+      // Begin turn logic
+
+      player.elementEnergy[player.surgingElement] += 1;
+      player.surgingElement =
+        (player.surgingElement + 1) % player.elements.length;
 
       const drawnCard = player.deck.pop();
       if (drawnCard) {

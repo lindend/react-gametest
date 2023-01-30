@@ -2,11 +2,11 @@
   display: grid;
   grid:
     "opp-energy opp-hand opp-hand opp-hand opp-deck" 1fr
-    "opp-energy opp-portrait opp-portrait opp-portrait empty" 1fr
-    "opp-board opp-board opp-board opp-board opp-board" 1.5fr
+    "opp-energy opp-portrait opp-portrait opp-portrait opp-deck" 1fr
+    "opp-board opp-board opp-board opp-board opp-board" 17rem
     "mid-divider mid-divider mid-divider mid-divider mid-divider" 5px
-    "player-board player-board player-board player-board player-board" 1.5fr
-    "player-energy player-portrait player-portrait player-portrait end-turn" 1fr
+    "player-board player-board player-board player-board player-board" 17rem
+    "player-energy player-portrait player-portrait player-portrait player-deck" 1fr
     "player-energy player-hand player-hand player-hand player-deck" 1fr
     / 1fr 2fr 2fr 2fr 1fr;
 }
