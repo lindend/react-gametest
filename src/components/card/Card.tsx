@@ -3,6 +3,7 @@ import { card } from "../../model/entities/card";
 import cardFrameUrl from "../../../art/board/cardframe.png";
 import cardBackUrl from "../../../art/board/cardback.png";
 import { ElementIcon } from "./icons/ElementIcon";
+import { getCardEntry } from "../../model/entities/cardDb";
 
 export enum cardFacing {
   front,
@@ -14,12 +15,14 @@ type CardProps = {
   facing: cardFacing;
 };
 
-const CardFront = ({ name, icon, description, cost }: card) => {
+const CardFront = (c: card) => {
+  let { name, picture: icon, templateId, cost, attack, health } = c;
+  const cardEntry = getCardEntry(templateId);
   return (
     <>
       <div className="flex justify-between items-center h-3">
         <div className="h-full flex-grow">
-          <span className="text-white">{name}</span>
+          <span className="text-white leading-4">{name}</span>
           {/* <svg viewBox="0 0 100 15" className="text-white overflow-visible">
             <text
               x="1"
@@ -49,8 +52,11 @@ const CardFront = ({ name, icon, description, cost }: card) => {
           background: `no-repeat center/cover url(${icon})`,
         }}
       ></div>
-      <div className="flex-1 border-2 border-gray-400 shadow-inner bg-gray-200 p-1 rounded-b-xl">
-        {description}
+      <div className="flex-1 border-2 border-gray-400 shadow-inner bg-gray-200 p-1 rounded-b-xl leading-3">
+        {cardEntry.description(c)}
+      </div>
+      <div className="leading-3 text-center">
+        Attack: {attack}, health: {health}
       </div>
     </>
   );

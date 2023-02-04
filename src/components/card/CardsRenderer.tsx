@@ -1,9 +1,8 @@
-import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { players } from "../../model/gameSlice";
 import { RootState } from "../../store";
 import { cardFacing } from "./Card";
-import CardPositioning from "./CardPositioning";
+import CardPositioning, { cardArea } from "./CardPositioning";
 
 const CardsRenderer = () => {
   const handCards = useSelector(
@@ -16,19 +15,47 @@ const CardsRenderer = () => {
     (state: RootState) => state.game.players[players.opponent].board
   );
 
-  const cards = handCards.concat(playerBoardCards).concat(opponentBoardCards);
-
-  const backsideCards = useSelector(
+  const opponentHandCards = useSelector(
     (state: RootState) => state.game.players[players.opponent].hand
   );
 
   return (
     <div id="cards-renderer">
-      {cards.map((card, i) => (
-        <CardPositioning key={card.id} card={card} facing={cardFacing.front} />
+      {handCards.map((card) => (
+        <CardPositioning
+          key={card.id}
+          card={card}
+          draggable={true}
+          area={cardArea.hand}
+          facing={cardFacing.front}
+        />
       ))}
-      {backsideCards.map((card) => (
-        <CardPositioning key={card.id} card={card} facing={cardFacing.back} />
+      {playerBoardCards.map((card) => (
+        <CardPositioning
+          key={card.id}
+          card={card}
+          draggable={true}
+          area={cardArea.board}
+          facing={cardFacing.front}
+        />
+      ))}
+      {opponentBoardCards.map((card) => (
+        <CardPositioning
+          key={card.id}
+          card={card}
+          draggable={false}
+          area={cardArea.board}
+          facing={cardFacing.front}
+        />
+      ))}
+      {opponentHandCards.map((card) => (
+        <CardPositioning
+          key={card.id}
+          card={card}
+          draggable={false}
+          area={cardArea.hand}
+          facing={cardFacing.back}
+        />
       ))}
     </div>
   );

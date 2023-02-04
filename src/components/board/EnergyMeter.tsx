@@ -11,9 +11,6 @@ export const EnergyMeter = ({ player }: EnergyMeterProps) => {
   const surgingElement = useSelector(
     (state: RootState) => state.game.players[player].surgingElement
   );
-  const energy = useSelector(
-    (state: RootState) => state.game.players[player].elementEnergy
-  );
 
   const elements = useSelector(
     (state: RootState) => state.game.players[player].elements
@@ -23,8 +20,8 @@ export const EnergyMeter = ({ player }: EnergyMeterProps) => {
     <div>
       {elements.map((e, i) => (
         <div key={i} className="flex flex-row">
-          <ElementIcon e={e} />
-          {energy[i]}
+          <ElementIcon e={e.element} />
+          {e.energy}/{e.maxEnergy}
           {surgingElement == i && <p>Surging</p>}
         </div>
       ))}

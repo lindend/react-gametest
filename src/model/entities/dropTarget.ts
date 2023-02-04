@@ -1,3 +1,4 @@
-export enum dropTarget {
-  playerBoard = "player-board",
-}
+export const dropTarget = {
+  playerBoard: "player-board",
+  card: (id: string) => `card-${id}`,
+};

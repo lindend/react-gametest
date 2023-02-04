@@ -5,9 +5,17 @@ export interface cardCost {
   element: element;
 }
 
+export enum cardType {
+  spell,
+  creature,
+}
+
 export interface cardTemplate {
+  templateId: string;
   cost: cardCost[];
   name: string;
-  icon: string;
-  description: string;
+  type: cardType;
+  picture: string;
+  attack: number;
+  health: number;
 }

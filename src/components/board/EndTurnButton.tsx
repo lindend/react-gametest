@@ -1,13 +1,13 @@
 import { HTMLAttributes } from "react";
 import { useDispatch } from "react-redux";
-import { endTurn } from "../../model/gameSlice";
+import { endTurn, players } from "../../model/gameSlice";
 import { Button } from "../common/Button";
 
 export const EndTurnButton = (props: HTMLAttributes<HTMLDivElement>) => {
   const dispatch = useDispatch();
 
   const endTurnAction = () => {
-    dispatch(endTurn());
+    dispatch(endTurn({ player: players.player }));
   };
 
   return (

@@ -1,57 +1,62 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { card, cardSlotId } from "../../model/entities/card";
 import { Card, cardFacing } from "./Card";
 import type { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { mouseSlot, setIsDragging } from "../../model/cardSlotSlice";
+import { dragType, mouseSlot, setIsDragging } from "../../model/cardSlotSlice";
 import { dropCard } from "../../model/gameSlice";
+
+export enum cardArea {
+  hand,
+  board,
+  deck,
+}
 
 export type CardPositioningProps = {
   card: card;
   facing: cardFacing;
+  area: cardArea;
+  draggable: boolean;
 };
 
-function getDroppable(x: number, y: number): string[] {
-  const elements = document.elementsFromPoint(x, y);
-
-  let dropTargets = [];
-  for (let element of elements) {
-    const dropTarget = element.getAttribute("drop-target");
-    if (!!dropTarget) {
-      dropTargets.push(dropTarget);
-    }
-  }
-
-  return dropTargets;
-}
-
-const CardPositioning = (props: CardPositioningProps) => {
-  const { card, facing } = props;
-
+const CardPositioning = ({
+  card,
+  facing,
+  area,
+  draggable,
+}: CardPositioningProps) => {
   const dispatch = useDispatch();
 
-  const [isDragging, setCardDragging] = useState(false);
+  const isDragging = useSelector(
+    (state: RootState) => state.cardSlots.draggingCard?.id == card.id
+  );
+
+  const drag = useSelector((state: RootState) => state.cardSlots.dragType);
+
+  const slot =
+    isDragging && drag == dragType.card ? mouseSlot : cardSlotId(card);
+
+  const slotPosition = useSelector(
+    (state: RootState) => state.cardSlots.slotPositions[slot]
+  );
 
   // Move this stuff into Card, maybe
   const startDrag = useCallback((mouseX: number, mouseY: number) => {
-    dispatch(setIsDragging({ isDragging: true, mouseX, mouseY }));
-    setCardDragging(true);
-  }, []);
-
-  const stopDragging = useCallback((mouseX: number, mouseY: number) => {
-    dispatch(setIsDragging({ isDragging: false, mouseX, mouseY }));
-    setCardDragging(false);
-
-    const dropTargets = getDroppable(mouseX, mouseY);
-    if (dropTargets.length > 0) {
-      dispatch(dropCard({ card, dropTargets }));
+    if (!draggable) {
+      return;
     }
+    dispatch(
+      setIsDragging({
+        card,
+        isDragging: true,
+        mouseX,
+        mouseY,
+        dragSourceX: mouseX,
+        dragSourceY: mouseY,
+        dragType: area == cardArea.hand ? dragType.card : dragType.target,
+      })
+    );
   }, []);
-
-  let slotPosition = useSelector(
-    (state: RootState) =>
-      state.cardSlots.slotPositions[isDragging ? mouseSlot : cardSlotId(card)]
-  );
 
   if (!slotPosition) {
     return <Fragment />;
@@ -81,7 +86,6 @@ const CardPositioning = (props: CardPositioningProps) => {
         card={card}
         facing={facing}
         onMouseDown={(ev) => startDrag(ev.clientX, ev.clientY)}
-        onMouseUp={(ev) => stopDragging(ev.clientX, ev.clientY)}
       />
     </div>
   );

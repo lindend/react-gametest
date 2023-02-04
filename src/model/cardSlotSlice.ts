@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { card } from "./entities/card";
 
 export const mouseSlot = "slot-mouse";
 
@@ -11,14 +12,28 @@ export interface slotPosition {
   zIndex: string;
 }
 
+export interface dragStartPosition {
+  x: number;
+  y: number;
+}
+
+export enum dragType {
+  target,
+  card,
+}
+
 export type sliceState = {
   slotPositions: { [id: string]: slotPosition };
   isDragging: boolean;
+  dragStart?: dragStartPosition;
+  dragType?: dragType;
+  draggingCard?: card;
 };
 
 export const initialState: sliceState = {
   slotPositions: {},
   isDragging: false,
+  dragStart: undefined,
 };
 
 const cardSlotSlice = createSlice({
@@ -54,11 +69,16 @@ const cardSlotSlice = createSlice({
       {
         payload,
       }: PayloadAction<{
+        card?: card;
         isDragging: boolean;
         mouseX?: number;
         mouseY?: number;
+        dragSourceX?: number;
+        dragSourceY?: number;
+        dragType?: dragType;
       }>
     ) => {
+      state.draggingCard = payload.card;
       state.isDragging = payload.isDragging;
 
       if (payload.mouseX && payload.mouseY) {
@@ -70,6 +90,14 @@ const cardSlotSlice = createSlice({
           rotation: "0deg",
           zIndex: "100",
         };
+      }
+
+      state.dragType = payload.dragType;
+
+      if (payload.dragSourceX && payload.dragSourceY) {
+        state.dragStart = { x: payload.dragSourceX, y: payload.dragSourceY };
+      } else {
+        state.dragStart = undefined;
       }
     },
   },

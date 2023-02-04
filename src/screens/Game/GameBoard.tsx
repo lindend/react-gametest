@@ -4,36 +4,48 @@ import "./gameboard.css";
 import { PlayerBoard } from "../../components/board/PlayerBoard";
 import { MouseSlotPositionTracker } from "../../components/card/MouseSlotPositionTracker";
 import { card } from "../../model/entities/card";
-import { beginGame, players } from "../../model/gameSlice";
+import { beginGame, elementEnergy, players } from "../../model/gameSlice";
 import { element } from "../../model/entities/element";
 import CardsRenderer from "../../components/card/CardsRenderer";
 import { EndTurnButton } from "../../components/board/EndTurnButton";
 import { Button } from "../../components/common/Button";
 import boardBackgroundUrl from "../../../art/board/board_pxl.png";
-import cardIcon from "../../../art/cards/dowar_arch_wolf_pxl.png";
 import { PlayerPortrait } from "../../components/board/PlayerPortrait";
 import defaultPortraitUrl from "../../../art/portraits/flamebender.png";
 import { CardStack } from "../../components/board/Cardstack";
 import { EnergyMeter } from "../../components/board/EnergyMeter";
+import { testCard } from "../../model/entities/cards/testCard";
+import { cardTemplate } from "../../model/entities/cardTemplate";
+import { fireElemental } from "../../model/entities/cards/fireElemental";
+import { DragTarget } from "../../components/board/DragTarget";
+import { DragAndDrop } from "../../components/board/DragAndDrop";
 
-const randomElement = (): element =>
-  Math.random() > 0.5 ? element.fire : element.life;
-
-const randomCard = (): card => ({
-  id: Math.floor(Math.random() * 100000),
-  cost: [
-    { amount: Math.floor(Math.random() * 3 + 1), element: randomElement() },
-  ],
-  name: `Card${Math.floor(Math.random() * 100)}`,
-  description: "Yes, this is test.",
-  icon: cardIcon,
-});
+const buildDeck = (
+  startId: number,
+  owner: players,
+  templates: cardTemplate[]
+) => {
+  let currentId = startId;
+  let deck: card[] = [];
+  for (let template of templates) {
+    deck.push({
+      id: currentId++,
+      owner,
+      ...template,
+    });
+  }
+  return deck;
+};
 
 function randomDeck(size: number) {
-  return Array.from({ length: size }, randomCard);
+  const testCards = [testCard, fireElemental];
+  return Array.from(
+    { length: size },
+    () => testCards[Math.floor(Math.random() * testCards.length)]
+  );
 }
 
-function getDeckEnergy(deck: card[]): element[] {
+function getDeckEnergy(deck: card[]): elementEnergy[] {
   let elements: Array<[element, number]> = [];
   for (let card of deck) {
     for (let cost of card.cost) {
@@ -50,15 +62,17 @@ function getDeckEnergy(deck: card[]): element[] {
   // sort list descending to find most used element
   elements.sort((a, b) => b[1] - a[1]);
 
-  return elements.map((e) => e[0]);
+  return elements.map((e) => {
+    return { element: e[0], energy: 0, maxEnergy: 0 };
+  });
 }
 
 const GameBoard = () => {
   const dispatch = useDispatch();
 
-  const playerDeck = randomDeck(15);
+  const playerDeck = buildDeck(1, players.player, randomDeck(15));
   const playerDeckEnergy = getDeckEnergy(playerDeck);
-  const opponentDeck = randomDeck(15);
+  const opponentDeck = buildDeck(10000, players.opponent, randomDeck(15));
   const opponentDeckEnergy = getDeckEnergy(opponentDeck);
 
   const newGameAction = () =>
@@ -68,10 +82,9 @@ const GameBoard = () => {
           health: 20,
           maxHealth: 20,
           portraitUrl: defaultPortraitUrl,
-          board: randomDeck(2),
+          board: buildDeck(100, players.player, randomDeck(2)),
           deck: playerDeck,
-          hand: randomDeck(3),
-          elementEnergy: playerDeckEnergy.map((_) => 0),
+          hand: buildDeck(300, players.player, randomDeck(3)),
           elements: playerDeckEnergy,
           surgingElement: 0,
         },
@@ -79,10 +92,9 @@ const GameBoard = () => {
           health: 20,
           maxHealth: 20,
           portraitUrl: defaultPortraitUrl,
-          board: randomDeck(1),
+          board: buildDeck(100100, players.opponent, randomDeck(1)),
           deck: opponentDeck,
-          hand: randomDeck(4),
-          elementEnergy: opponentDeckEnergy.map((_) => 0),
+          hand: buildDeck(100200, players.opponent, randomDeck(4)),
           elements: opponentDeckEnergy,
           surgingElement: 0,
         },
@@ -92,6 +104,8 @@ const GameBoard = () => {
   return (
     <>
       <MouseSlotPositionTracker />
+      <DragAndDrop />
+      <DragTarget />
       <div
         className="gameboard w-full h-full bg-[length:800px_800px] pixelated"
         style={{ backgroundImage: `url(${boardBackgroundUrl})` }}
