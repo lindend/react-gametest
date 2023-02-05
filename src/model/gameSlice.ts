@@ -60,7 +60,10 @@ function getPlayerCards(player: playerState) {
   return [...player.board, ...player.hand, ...player.deck];
 }
 
-function getCard(cardId: number, state: sliceState): card | undefined {
+export function getCardById(
+  cardId: number,
+  state: sliceState
+): card | undefined {
   const allCards = [
     ...getPlayerCards(state.players[players.player]),
     ...getPlayerCards(state.players[players.opponent]),
@@ -108,7 +111,7 @@ const gameSlice = createSlice({
       { payload }: PayloadAction<{ cardId: number; amount: number }>
     ) {
       const { cardId, amount } = payload;
-      let card = getCard(cardId, state);
+      let card = getCardById(cardId, state);
       if (!card) {
         return;
       }
@@ -142,17 +145,6 @@ const gameSlice = createSlice({
         e.energy -= cost.amount;
       }
     },
-    dropCard: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        card: card;
-        drag: dragType;
-        dropTargets: string[];
-      }>
-    ) => {},
-    endTurn(_, action: PayloadAction<{ player: players }>) {},
   },
 });
 
@@ -161,10 +153,8 @@ export const {
   drawCard,
   gainEnergy,
   resetEnergy,
-  dropCard,
   damageCard,
   playCard,
-  endTurn,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

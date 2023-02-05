@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { dropCard } from "../../model/actionsSlice";
 import { setIsDragging } from "../../model/cardSlotSlice";
-import { dropCard } from "../../model/gameSlice";
 import { store } from "../../store";
 
 function getDroppable(x: number, y: number): string[] {
@@ -33,7 +33,7 @@ export const DragAndDrop = () => {
     dispatch(setIsDragging({ isDragging: false, mouseX, mouseY }));
 
     const dropTargets = getDroppable(mouseX, mouseY);
-    if (dropTargets.length > 0 && draggedCard && dragType) {
+    if (dropTargets.length > 0 && draggedCard && dragType != undefined) {
       dispatch(dropCard({ card: draggedCard, drag: dragType, dropTargets }));
     }
   }, []);

@@ -1,6 +1,7 @@
 import { AppListenerEffectAPI } from "../../store";
+import { endTurn } from "../actionsSlice";
 import { getCardEntry } from "../entities/cardDb";
-import { drawCard, endTurn, gainEnergy, resetEnergy } from "../gameSlice";
+import { drawCard, gainEnergy, resetEnergy } from "../gameSlice";
 
 export const endTurnAction = {
   actionCreator: endTurn,

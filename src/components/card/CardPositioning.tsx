@@ -4,7 +4,6 @@ import { Card, cardFacing } from "./Card";
 import type { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { dragType, mouseSlot, setIsDragging } from "../../model/cardSlotSlice";
-import { dropCard } from "../../model/gameSlice";
 
 export enum cardArea {
   hand,

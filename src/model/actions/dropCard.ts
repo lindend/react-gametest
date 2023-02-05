@@ -1,7 +1,8 @@
 import { AppListenerEffectAPI } from "../../store";
+import { attackCard, dropCard } from "../actionsSlice";
 import { dragType } from "../cardSlotSlice";
-import { getCardEntry } from "../entities/cardDb";
-import { dropCard, playCard } from "../gameSlice";
+import { dropTarget } from "../entities/dropTarget";
+import { getCardById, playCard } from "../gameSlice";
 
 export const dropCardAction = {
   actionCreator: dropCard,
@@ -25,6 +26,15 @@ export const dropCardAction = {
 
       dispatch(playCard({ card }));
     } else if (drag == dragType.target) {
+      const target = dropTargets[0];
+
+      const cardId = dropTarget.parseCard(target);
+      if (cardId != undefined) {
+        const targetCard = getCardById(cardId, state);
+        if (targetCard != undefined) {
+          await dispatch(attackCard({ source: card, target: targetCard }));
+        }
+      }
     }
   },
 };

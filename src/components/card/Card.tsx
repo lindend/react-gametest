@@ -4,6 +4,7 @@ import cardFrameUrl from "../../../art/board/cardframe.png";
 import cardBackUrl from "../../../art/board/cardback.png";
 import { ElementIcon } from "./icons/ElementIcon";
 import { getCardEntry } from "../../model/entities/cardDb";
+import { dropTarget } from "../../model/entities/dropTarget";
 
 export enum cardFacing {
   front,
@@ -70,6 +71,7 @@ export const Card = ({
   return (
     <div
       className="drop-shadow-md hover:drop-shadow-lg transition-all flex-shrink-0 inline-flex flex-col p-2 gap-1 w-card h-card select-none relative"
+      drop-target={dropTarget.card(card.id)}
       {...rest}
     >
       {facing == cardFacing.front ? <CardFront {...card} /> : <Fragment />}
