@@ -21,9 +21,11 @@ export interface playerState {
 }
 
 export enum players {
-  player,
-  opponent,
+  player = "player",
+  opponent = "opponent",
 }
+
+export type playersType = `${players}`;
 
 export enum gameStateId {
   none,
@@ -124,6 +126,14 @@ const gameSlice = createSlice({
         );
       }
     },
+    damagePlayer(
+      state,
+      {
+        payload: { player, amount },
+      }: PayloadAction<{ player: players; amount: number }>
+    ) {
+      state.players[player].health -= amount;
+    },
     playCard: (state, { payload: { card } }: PayloadAction<{ card: card }>) => {
       const player = state.players[state.currentTurn];
       const cardHandIndex = player.hand.findIndex((c) => c.id == card.id);
@@ -155,6 +165,7 @@ export const {
   resetEnergy,
   damageCard,
   playCard,
+  damagePlayer,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

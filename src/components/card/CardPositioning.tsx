@@ -40,22 +40,25 @@ const CardPositioning = ({
   );
 
   // Move this stuff into Card, maybe
-  const startDrag = useCallback((mouseX: number, mouseY: number) => {
-    if (!draggable) {
-      return;
-    }
-    dispatch(
-      setIsDragging({
-        card,
-        isDragging: true,
-        mouseX,
-        mouseY,
-        dragSourceX: mouseX,
-        dragSourceY: mouseY,
-        dragType: area == cardArea.hand ? dragType.card : dragType.target,
-      })
-    );
-  }, []);
+  const startDrag = useCallback(
+    (mouseX: number, mouseY: number) => {
+      if (!draggable) {
+        return;
+      }
+      dispatch(
+        setIsDragging({
+          card,
+          isDragging: true,
+          mouseX,
+          mouseY,
+          dragSourceX: mouseX,
+          dragSourceY: mouseY,
+          dragType: area == cardArea.hand ? dragType.card : dragType.target,
+        })
+      );
+    },
+    [card, area, draggable]
+  );
 
   if (!slotPosition) {
     return <Fragment />;

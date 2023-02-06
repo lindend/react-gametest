@@ -9,7 +9,9 @@ export const attackCardAction = {
     api: AppListenerEffectAPI
   ) => {
     const { dispatch } = api;
-    dispatch(damageCard({ cardId: target.id, amount: source.attack }));
-    dispatch(damageCard({ cardId: source.id, amount: target.attack }));
+    if (source.owner != target.owner) {
+      dispatch(damageCard({ cardId: target.id, amount: source.attack }));
+      dispatch(damageCard({ cardId: source.id, amount: target.attack }));
+    }
   },
 };

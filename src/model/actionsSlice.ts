@@ -19,9 +19,14 @@ const gameSlice = createSlice({
     ) => {},
     endTurn(_, action: PayloadAction<{ player: players }>) {},
     attackCard(_, action: PayloadAction<{ source: card; target: card }>) {},
+    attackPlayer(
+      _,
+      action: PayloadAction<{ source: card; target: players }>
+    ) {},
   },
 });
 
-export const { dropCard, endTurn, attackCard } = gameSlice.actions;
+export const { dropCard, endTurn, attackCard, attackPlayer } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;
