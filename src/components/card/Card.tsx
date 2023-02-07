@@ -1,5 +1,5 @@
 import { Fragment, HTMLAttributes } from "react";
-import { card } from "../../model/entities/card";
+import { Card as CardEntity } from "../../model/entities/card";
 import cardFrameUrl from "../../../art/board/cardframe.png";
 import cardBackUrl from "../../../art/board/cardback.png";
 import { ElementIcon } from "./icons/ElementIcon";
@@ -12,11 +12,11 @@ export enum cardFacing {
 }
 
 type CardProps = {
-  card: card;
+  card: CardEntity;
   facing: cardFacing;
 };
 
-const CardFront = (c: card) => {
+const CardFront = (c: CardEntity) => {
   let { name, picture: icon, templateId, cost, attack, health } = c;
   const cardEntry = getCardEntry(templateId);
   return (

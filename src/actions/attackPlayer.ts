@@ -1,6 +1,6 @@
-import { AppListenerEffectAPI } from "../../store";
-import { attackPlayer } from "../actionsSlice";
-import { damagePlayer } from "../gameSlice";
+import { attackPlayer } from "../model/actionsSlice";
+import { damagePlayer } from "../model/gameSlice";
+import { AppListenerEffectAPI } from "../store";
 
 export const attackPlayerAction = {
   actionCreator: attackPlayer,

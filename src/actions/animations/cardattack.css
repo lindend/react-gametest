@@ -1,0 +1,16 @@
+@keyframes cardattack {
+  0% {
+    z-index: 200;
+  }
+  60% {
+    translate: var(--card-attack-pull-back-position);
+    rotate: var(--card-attack-rotation);
+  }
+  80% {
+    translate: var(--card-attack-target-position);
+    rotate: var(--card-attack-rotation);
+  }
+  100% {
+    z-index: 200;
+  }
+}

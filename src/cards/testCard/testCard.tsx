@@ -1,7 +1,7 @@
-import { cardTemplate, cardType } from "../cardTemplate";
-import { element } from "../element";
-import cardIcon from "../../../../art/cards/dowar_arch_wolf_pxl.png";
-import { cardDbEntry } from "../cardDb";
+import cardIcon from "./dowar_arch_wolf_pxl.png";
+import { cardDbEntry } from "../../model/entities/cardDb";
+import { cardTemplate, cardType } from "../../model/entities/cardTemplate";
+import { element } from "../../model/entities/element";
 
 export const testCard: cardTemplate = {
   templateId: "test_card",

@@ -26,7 +26,10 @@ export const DragTarget = () => {
     return <Fragment />;
   }
 
-  const mousePos = { x: mouseSlotPos.x - mousePosXOffset, y: mouseSlotPos.y };
+  const mousePos = {
+    x: mouseSlotPos.position.x - mousePosXOffset,
+    y: mouseSlotPos.position.y,
+  };
 
   const dx = mousePos.x - dragSource.x;
   const dy = mousePos.y - dragSource.y;

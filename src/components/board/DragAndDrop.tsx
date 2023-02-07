@@ -30,7 +30,12 @@ export const DragAndDrop = () => {
     }
     const dragType = state.cardSlots.dragType;
 
-    dispatch(setIsDragging({ isDragging: false, mouseX, mouseY }));
+    dispatch(
+      setIsDragging({
+        isDragging: false,
+        mousePosition: { x: mouseX, y: mouseY },
+      })
+    );
 
     const dropTargets = getDroppable(mouseX, mouseY);
     if (dropTargets.length > 0 && draggedCard && dragType != undefined) {

@@ -1,20 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { card } from "./entities/card";
+import { RootState } from "../store";
+import { Card, cardSlotId } from "./entities/card";
+import { vector2d } from "../math/vector2d";
 
 export const mouseSlot = "slot-mouse";
 
 export interface slotPosition {
-  x: number;
-  y: number;
+  position: vector2d;
   width: number;
   height: number;
   rotation: string;
   zIndex: string;
-}
-
-export interface dragStartPosition {
-  x: number;
-  y: number;
 }
 
 export enum dragType {
@@ -25,9 +21,9 @@ export enum dragType {
 export type sliceState = {
   slotPositions: { [id: string]: slotPosition };
   isDragging: boolean;
-  dragStart?: dragStartPosition;
+  dragStart?: vector2d;
   dragType?: dragType;
-  draggingCard?: card;
+  draggingCard?: Card;
 };
 
 export const initialState: sliceState = {
@@ -53,11 +49,10 @@ const cardSlotSlice = createSlice({
     },
     setMousePosition: (
       state,
-      { payload }: PayloadAction<{ mouseX: number; mouseY: number }>
+      { payload: { mouse } }: PayloadAction<{ mouse: vector2d }>
     ) => {
       state.slotPositions[mouseSlot] = {
-        x: payload.mouseX,
-        y: payload.mouseY,
+        position: mouse,
         width: 0,
         height: 0,
         rotation: "0deg",
@@ -67,37 +62,28 @@ const cardSlotSlice = createSlice({
     setIsDragging: (
       state,
       {
-        payload,
+        payload: { mousePosition, card, isDragging, dragType, dragSource },
       }: PayloadAction<{
-        card?: card;
+        card?: Card;
         isDragging: boolean;
-        mouseX?: number;
-        mouseY?: number;
-        dragSourceX?: number;
-        dragSourceY?: number;
+        mousePosition: vector2d;
+        dragSource?: vector2d;
         dragType?: dragType;
       }>
     ) => {
-      state.draggingCard = payload.card;
-      state.isDragging = payload.isDragging;
+      state.draggingCard = card;
+      state.isDragging = isDragging;
+      state.dragType = dragType;
+      state.dragStart = dragSource;
 
-      if (payload.mouseX && payload.mouseY) {
+      if (mousePosition) {
         state.slotPositions[mouseSlot] = {
-          x: payload.mouseX,
-          y: payload.mouseY,
+          position: mousePosition,
           width: 0,
           height: 0,
           rotation: "0deg",
           zIndex: "100",
         };
-      }
-
-      state.dragType = payload.dragType;
-
-      if (payload.dragSourceX && payload.dragSourceY) {
-        state.dragStart = { x: payload.dragSourceX, y: payload.dragSourceY };
-      } else {
-        state.dragStart = undefined;
       }
     },
   },
@@ -109,5 +95,10 @@ export const {
   setMousePosition,
   setIsDragging,
 } = cardSlotSlice.actions;
+
+export const getCardPosition = (state: RootState, c: Card) => {
+  const slotId = cardSlotId(c);
+  return state.cardSlots.slotPositions[slotId];
+};
 
 export default cardSlotSlice.reducer;

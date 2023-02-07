@@ -1,5 +1,5 @@
 import { Unsubscribe } from "@reduxjs/toolkit";
-import { AppStartListening } from "../../store";
+import { AppStartListening } from "../store";
 import { attackCardAction } from "./attackCard";
 import { attackPlayerAction } from "./attackPlayer";
 import { dropCardAction } from "./dropCard";

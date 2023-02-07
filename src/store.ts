@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import cardSlotsReducer from "./model/cardSlotSlice";
 import gameReducer from "./model/gameSlice";
+import animationReducer from "./model/animationSlice";
 
 const listenerMiddleware = createListenerMiddleware();
 
@@ -14,6 +15,7 @@ export const store = configureStore({
   reducer: {
     cardSlots: cardSlotsReducer,
     game: gameReducer,
+    animation: animationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(listenerMiddleware.middleware),

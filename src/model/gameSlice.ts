@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { dragType } from "./cardSlotSlice";
-import { card } from "./entities/card";
+import { Card } from "./entities/card";
 import { element } from "./entities/element";
 
 export interface elementEnergy {
@@ -15,9 +15,9 @@ export interface playerState {
   portraitUrl: string;
   elements: elementEnergy[];
   surgingElement: number;
-  hand: card[];
-  board: card[];
-  deck: card[];
+  hand: Card[];
+  board: Card[];
+  deck: Card[];
 }
 
 export enum players {
@@ -65,7 +65,7 @@ function getPlayerCards(player: playerState) {
 export function getCardById(
   cardId: number,
   state: sliceState
-): card | undefined {
+): Card | undefined {
   const allCards = [
     ...getPlayerCards(state.players[players.player]),
     ...getPlayerCards(state.players[players.opponent]),
@@ -134,7 +134,7 @@ const gameSlice = createSlice({
     ) {
       state.players[player].health -= amount;
     },
-    playCard: (state, { payload: { card } }: PayloadAction<{ card: card }>) => {
+    playCard: (state, { payload: { card } }: PayloadAction<{ card: Card }>) => {
       const player = state.players[state.currentTurn];
       const cardHandIndex = player.hand.findIndex((c) => c.id == card.id);
 

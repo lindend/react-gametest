@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { startAppListening, store } from "./store";
 import { useEffect } from "react";
 import { Unsubscribe } from "@reduxjs/toolkit";
-import { setupListeners } from "./model/actions/actions";
+import { setupListeners } from "./actions/actions";
 
 function App() {
   useEffect(() => {

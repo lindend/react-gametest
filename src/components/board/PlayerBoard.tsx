@@ -30,7 +30,7 @@ export const PlayerBoard = ({
         {...props}
       >
         {cards.map((card) => (
-          <div className="w-44" key={card.id}>
+          <div className="w-card" key={card.id}>
             <CardSlot id={cardSlotId(card)} zIndex={0} angle={0} />
           </div>
         ))}

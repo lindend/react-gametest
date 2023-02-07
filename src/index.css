@@ -14,3 +14,8 @@
 img {
   image-rendering: pixelated;
 }
+
+html {
+  --card-height: 15rem;
+  --card-width: 10rem;
+}

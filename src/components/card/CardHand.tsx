@@ -1,4 +1,4 @@
-import { card, cardSlotId as cardSlotId } from "../../model/entities/card";
+import { Card, cardSlotId as cardSlotId } from "../../model/entities/card";
 import CardSlot from "./CardSlot";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
@@ -24,7 +24,7 @@ const CardHandSlot = ({
   const offsetY = unitCircleLength * (1 - Math.cos((angle / 180) * Math.PI));
   return (
     <div
-      className="w-24 flex-shrink-[10] min-w-0 h-fit"
+      className="w-halfcard flex-shrink-[10] min-w-0 h-fit"
       style={
         flipped
           ? { marginBottom: `${offsetY}px` }
@@ -63,11 +63,11 @@ export const CardHand = ({
   const numCardSlots = cards.length;
   const maxCardAngle = lerp(3, maxCardAngleFullHand, cards.length / 10);
   const minCardX = Object.values(handSlotPositions).reduce(
-    (prev, curr) => Math.min(prev, curr.x),
+    (prev, curr) => Math.min(prev, curr.position.x),
     0
   );
   const maxCardX = Object.values(handSlotPositions).reduce(
-    (prev, curr) => Math.max(prev, curr.x),
+    (prev, curr) => Math.max(prev, curr.position.x),
     0
   );
   const unitCircleLength =

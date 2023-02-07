@@ -10,7 +10,7 @@ export const MouseSlotPositionTracker = () => {
     document.addEventListener("mousemove", (ev) => {
       const isDragging = store.getState().cardSlots.isDragging;
       if (isDragging) {
-        dispatch(setMousePosition({ mouseX: ev.clientX, mouseY: ev.clientY }));
+        dispatch(setMousePosition({ mouse: { x: ev.clientX, y: ev.clientY } }));
       }
     });
   }, []);

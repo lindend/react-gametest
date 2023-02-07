@@ -1,0 +1,13 @@
+@keyframes fireelemental_damage {
+}
+
+@keyframes fireelemental_damage_spark {
+  0% {
+    translate: var(--fire-elemental-damage-card-position);
+    rotate: var(--fire-elemental-damage-rotation);
+  }
+  100% {
+    translate: var(--fire-elemental-damage-target-position);
+    rotate: var(--fire-elemental-damage-rotation);
+  }
+}

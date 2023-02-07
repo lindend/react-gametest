@@ -1,9 +1,9 @@
 import { AppListenerEffectAPI, RootState } from "../../store";
-import { card } from "./card";
+import { Card } from "./card";
 
 export interface cardDbEntry {
-  description: (c: card) => JSX.Element;
-  onEndTurn?: (c: card, api: AppListenerEffectAPI) => Promise<void>;
+  description: (c: Card) => JSX.Element;
+  onEndTurn?: (c: Card, api: AppListenerEffectAPI) => Promise<void>;
 }
 
 const cardDb: { [cardTemplateId: string]: cardDbEntry } = {};

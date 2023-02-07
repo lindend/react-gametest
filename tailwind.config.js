@@ -15,10 +15,11 @@ module.exports = {
         highlight: "0 0 10px rgba(234, 107, 0, 0.7)",
       },
       width: {
-        card: "10rem",
+        card: "var(--card-width)",
+        halfcard: "calc(var(--card-width) / 2)",
       },
       height: {
-        card: "15rem",
+        card: "var(--card-height)",
       },
     },
   },

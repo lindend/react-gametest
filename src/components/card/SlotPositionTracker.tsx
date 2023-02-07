@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setSlotPositions, slotPosition } from "../../model/cardSlotSlice";
-import { card, cardSlotId } from "../../model/entities/card";
+import { Card, cardSlotId } from "../../model/entities/card";
 
-export const SlotPositionTracker = (props: { cards: card[] }) => {
+export const SlotPositionTracker = (props: { cards: Card[] }) => {
   const { cards } = props;
   const dispatch = useDispatch();
   useEffect(() => {
@@ -15,8 +15,10 @@ export const SlotPositionTracker = (props: { cards: card[] }) => {
         }
 
         const slotPosition: slotPosition = {
-          x: slotElement.offsetLeft + slotElement.offsetWidth / 2,
-          y: slotElement.offsetTop,
+          position: {
+            x: slotElement.offsetLeft + slotElement.offsetWidth / 2,
+            y: slotElement.offsetTop,
+          },
           width: slotElement.offsetWidth,
           height: slotElement.offsetHeight,
           rotation: slotElement.style.rotate,

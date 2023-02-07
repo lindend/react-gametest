@@ -1,8 +1,8 @@
-import { AppListenerEffectAPI } from "../../store";
-import { attackCard, attackPlayer, dropCard } from "../actionsSlice";
-import { dragType } from "../cardSlotSlice";
-import { dropTarget } from "../entities/dropTarget";
-import { getCardById, playCard } from "../gameSlice";
+import { dropCard, attackCard, attackPlayer } from "../model/actionsSlice";
+import { dragType } from "../model/cardSlotSlice";
+import { dropTarget } from "../model/entities/dropTarget";
+import { playCard, getCardById } from "../model/gameSlice";
+import { AppListenerEffectAPI } from "../store";
 
 export const dropCardAction = {
   actionCreator: dropCard,

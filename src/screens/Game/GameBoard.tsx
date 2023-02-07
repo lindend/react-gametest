@@ -3,7 +3,7 @@ import { CardHand } from "../../components/card/CardHand";
 import "./gameboard.css";
 import { PlayerBoard } from "../../components/board/PlayerBoard";
 import { MouseSlotPositionTracker } from "../../components/card/MouseSlotPositionTracker";
-import { card } from "../../model/entities/card";
+import { Card } from "../../model/entities/card";
 import { beginGame, elementEnergy, players } from "../../model/gameSlice";
 import { element } from "../../model/entities/element";
 import CardsRenderer from "../../components/card/CardsRenderer";
@@ -14,11 +14,11 @@ import { PlayerPortrait } from "../../components/board/PlayerPortrait";
 import defaultPortraitUrl from "../../../art/portraits/flamebender.png";
 import { CardStack } from "../../components/board/Cardstack";
 import { EnergyMeter } from "../../components/board/EnergyMeter";
-import { testCard } from "../../model/entities/cards/testCard";
 import { cardTemplate } from "../../model/entities/cardTemplate";
-import { fireElemental } from "../../model/entities/cards/fireElemental";
 import { DragTarget } from "../../components/board/DragTarget";
 import { DragAndDrop } from "../../components/board/DragAndDrop";
+import { fireElemental } from "../../cards/fireElemental/fireElemental";
+import { testCard } from "../../cards/testCard/testCard";
 
 const buildDeck = (
   startId: number,
@@ -26,7 +26,7 @@ const buildDeck = (
   templates: cardTemplate[]
 ) => {
   let currentId = startId;
-  let deck: card[] = [];
+  let deck: Card[] = [];
   for (let template of templates) {
     deck.push({
       id: currentId++,
@@ -45,7 +45,7 @@ function randomDeck(size: number) {
   );
 }
 
-function getDeckEnergy(deck: card[]): elementEnergy[] {
+function getDeckEnergy(deck: Card[]): elementEnergy[] {
   let elements: Array<[element, number]> = [];
   for (let card of deck) {
     for (let cost of card.cost) {
