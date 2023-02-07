@@ -47,7 +47,7 @@ const SparkElement = (target: vector2d, cardPosition: vector2d) => {
   );
 };
 
-const duration = 30;
+const duration = 0.3;
 
 export const fireElementalDamageAnimation: AnimationRegistration<FireElementalDamageAnimationProperties> =
   {
