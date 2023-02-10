@@ -1,4 +1,4 @@
-import { players } from "../gameSlice";
+import { PlayerType } from "./Player";
 
 const cardPrefix = "card-";
 const playerPrefix = "player-";
@@ -14,11 +14,11 @@ export const dropTarget = {
     }
   },
 
-  player: (player: players) => `${playerPrefix}${player}`,
-  parsePlayer: (target: string): players | undefined => {
+  player: (player: PlayerType) => `${playerPrefix}${player}`,
+  parsePlayer: (target: string): PlayerType | undefined => {
     if (target.startsWith(playerPrefix)) {
       const whichPlayer = target.substring(playerPrefix.length);
-      return whichPlayer as players;
+      return whichPlayer as PlayerType;
     } else {
       return undefined;
     }

@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
-import { players } from "../../model/gameSlice";
+import { PlayerType } from "../../model/entities/Player";
 import { RootState } from "../../store";
 import { ElementIcon } from "../card/icons/ElementIcon";
 
 export interface EnergyMeterProps {
-  player: players;
+  player: PlayerType;
 }
 
 export const EnergyMeter = ({ player }: EnergyMeterProps) => {

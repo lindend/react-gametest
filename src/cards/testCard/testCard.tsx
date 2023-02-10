@@ -1,18 +1,18 @@
 import cardIcon from "./dowar_arch_wolf_pxl.png";
-import { cardDbEntry } from "../../model/entities/cardDb";
-import { cardTemplate, cardType } from "../../model/entities/cardTemplate";
-import { element } from "../../model/entities/element";
+import { CardDbEntry } from "../../model/entities/cardDb";
+import { CardTemplate, CardType } from "../../model/entities/cardTemplate";
+import { ElementType } from "../../model/entities/element";
 
-export const testCard: cardTemplate = {
+export const testCard: CardTemplate = {
   templateId: "test_card",
   name: "Test",
-  cost: [{ element: element.life, amount: 1 }],
+  cost: [{ element: ElementType.life, amount: 1 }],
   picture: cardIcon,
-  type: cardType.creature,
+  cardType: CardType.creature,
   health: 1,
   attack: 1,
 };
 
-export const testCardEntry: cardDbEntry = {
+export const testCardEntry: CardDbEntry = {
   description: () => <>Yes, this is test.</>,
 };

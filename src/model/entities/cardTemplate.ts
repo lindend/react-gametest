@@ -1,20 +1,21 @@
-import { element } from "./element";
+import { ElementType } from "./element";
 
-export interface cardCost {
+export interface CardCost {
   amount: number;
-  element: element;
+  element: ElementType;
 }
 
-export enum cardType {
+export enum CardType {
   spell,
+  targetedSpell,
   creature,
 }
 
-export interface cardTemplate {
+export interface CardTemplate {
   templateId: string;
-  cost: cardCost[];
+  cost: CardCost[];
   name: string;
-  type: cardType;
+  cardType: CardType;
   picture: string;
   attack: number;
   health: number;

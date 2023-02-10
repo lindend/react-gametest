@@ -2,7 +2,7 @@ import "./fireElementalDamageAnimation.css";
 import projectileUrl from "./fire_projectile.png";
 import { CSSProperties } from "react";
 import {
-  vector2d,
+  Vector2d,
   subtract,
   normalize,
   add,
@@ -16,12 +16,12 @@ const arcHeight = 50;
 
 export interface FireElementalDamageAnimationProperties
   extends AnimationProperties {
-  cardPosition: vector2d;
-  targetPosition0?: vector2d;
-  targetPosition1?: vector2d;
+  cardPosition: Vector2d;
+  targetPosition0?: Vector2d;
+  targetPosition1?: Vector2d;
 }
 
-const SparkElement = (target: vector2d, cardPosition: vector2d) => {
+const SparkElement = (target: Vector2d, cardPosition: Vector2d) => {
   const delta = subtract(target, cardPosition);
   const rotation = delta.x > 0 ? 0 : 180;
   return (

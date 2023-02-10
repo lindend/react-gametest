@@ -1,44 +1,38 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { dragType } from "./cardSlotSlice";
-import { Card } from "./entities/card";
-import { element } from "./entities/element";
+import { Card, cardEntityType } from "./entities/card";
+import { ElementType } from "./entities/element";
+import { Entity } from "./entities/Entity";
+import { Player, playerEntityType, PlayerType } from "./entities/Player";
 
-export interface elementEnergy {
-  element: element;
+export interface ElementEnergy {
+  element: ElementType;
   energy: number;
   maxEnergy: number;
 }
 
-export interface playerState {
+export interface PlayerState {
   health: number;
   maxHealth: number;
   portraitUrl: string;
-  elements: elementEnergy[];
+  elements: ElementEnergy[];
   surgingElement: number;
   hand: Card[];
   board: Card[];
   deck: Card[];
 }
 
-export enum players {
-  player = "player",
-  opponent = "opponent",
-}
-
-export type playersType = `${players}`;
-
-export enum gameStateId {
+export enum GameStateId {
   none,
   inTurn,
 }
 
-export type sliceState = {
-  players: { [key in players]: playerState };
-  currentTurn: players;
-  state: gameStateId;
+export type SliceState = {
+  players: { [key in PlayerType]: PlayerState };
+  currentTurn: PlayerType;
+  state: GameStateId;
 };
 
-export const initialGameState: playerState = {
+export const initialGameState: PlayerState = {
   health: 0,
   maxHealth: 0,
   portraitUrl: "",
@@ -49,26 +43,26 @@ export const initialGameState: playerState = {
   deck: [],
 };
 
-export const initialState: sliceState = {
+export const initialState: SliceState = {
   players: {
-    [players.player]: initialGameState,
-    [players.opponent]: initialGameState,
+    [PlayerType.player]: initialGameState,
+    [PlayerType.opponent]: initialGameState,
   },
-  currentTurn: players.player,
-  state: gameStateId.none,
+  currentTurn: PlayerType.player,
+  state: GameStateId.none,
 };
 
-function getPlayerCards(player: playerState) {
+function getPlayerCards(player: PlayerState) {
   return [...player.board, ...player.hand, ...player.deck];
 }
 
 export function getCardById(
   cardId: number,
-  state: sliceState
+  state: SliceState
 ): Card | undefined {
   const allCards = [
-    ...getPlayerCards(state.players[players.player]),
-    ...getPlayerCards(state.players[players.opponent]),
+    ...getPlayerCards(state.players[PlayerType.player]),
+    ...getPlayerCards(state.players[PlayerType.opponent]),
   ];
   return allCards.find((c) => c.id == cardId);
 }
@@ -79,15 +73,15 @@ const gameSlice = createSlice({
   reducers: {
     beginGame: (
       state,
-      { payload }: PayloadAction<{ player: playerState; opponent: playerState }>
+      { payload }: PayloadAction<{ player: PlayerState; opponent: PlayerState }>
     ) => {
       const { player, opponent } = payload;
 
-      state.players[players.player] = player;
-      state.players[players.opponent] = opponent;
-      state.state = gameStateId.none;
+      state.players[PlayerType.player] = player;
+      state.players[PlayerType.opponent] = opponent;
+      state.state = GameStateId.none;
     },
-    drawCard: (state, { payload }: PayloadAction<{ player: players }>) => {
+    drawCard: (state, { payload }: PayloadAction<{ player: PlayerType }>) => {
       const player = state.players[payload.player];
       const drawnCard = player.deck.pop();
       if (drawnCard) {
@@ -96,43 +90,46 @@ const gameSlice = createSlice({
         player.health -= 1;
       }
     },
-    gainEnergy: (state, { payload }: PayloadAction<{ player: players }>) => {
+    gainEnergy: (state, { payload }: PayloadAction<{ player: PlayerType }>) => {
       const player = state.players[payload.player];
       player.elements[player.surgingElement].maxEnergy += 1;
       player.surgingElement =
         (player.surgingElement + 1) % player.elements.length;
     },
-    resetEnergy: (state, { payload }: PayloadAction<{ player: players }>) => {
+    resetEnergy: (
+      state,
+      { payload }: PayloadAction<{ player: PlayerType }>
+    ) => {
       const player = state.players[payload.player];
       for (let e of player.elements) {
         e.energy = e.maxEnergy;
       }
     },
-    damageCard(
-      state,
-      { payload }: PayloadAction<{ cardId: number; amount: number }>
-    ) {
-      const { cardId, amount } = payload;
-      let card = getCardById(cardId, state);
-      if (!card) {
-        return;
-      }
-      card.health -= amount;
-      if (card.health <= 0) {
-        let player = state.players[card.owner];
-        player.board.splice(
-          player.board.findIndex((c) => c.id == card?.id),
-          1
-        );
-      }
-    },
-    damagePlayer(
+    damageEntity(
       state,
       {
-        payload: { player, amount },
-      }: PayloadAction<{ player: players; amount: number }>
+        payload: { target, amount },
+      }: PayloadAction<{ target: Entity; amount: number }>
     ) {
-      state.players[player].health -= amount;
+      switch (target.type) {
+        case cardEntityType:
+          let card = getCardById((target as Card).id, state);
+          if (!card) {
+            return;
+          }
+          card.health -= amount;
+          if (card.health <= 0) {
+            let player = state.players[card.owner];
+            player.board.splice(
+              player.board.findIndex((c) => c.id == card?.id),
+              1
+            );
+          }
+          break;
+        case playerEntityType:
+          state.players[(target as Player).playerType].health -= amount;
+          break;
+      }
     },
     playCard: (state, { payload: { card } }: PayloadAction<{ card: Card }>) => {
       const player = state.players[state.currentTurn];
@@ -143,7 +140,6 @@ const gameSlice = createSlice({
       }
 
       player.hand.splice(cardHandIndex, 1);
-      player.board.push(card);
 
       // Deduct energy cost
       for (let cost of card.cost) {
@@ -155,6 +151,15 @@ const gameSlice = createSlice({
         e.energy -= cost.amount;
       }
     },
+    addCardToBoard(
+      state,
+      {
+        payload: { card, player, index },
+      }: PayloadAction<{ card: Card; player: PlayerType; index: number }>
+    ) {
+      const p = state.players[player];
+      p.board.splice(index, 0, card);
+    },
   },
 });
 
@@ -163,9 +168,9 @@ export const {
   drawCard,
   gainEnergy,
   resetEnergy,
-  damageCard,
+  damageEntity,
   playCard,
-  damagePlayer,
+  addCardToBoard,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

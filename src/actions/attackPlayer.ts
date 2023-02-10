@@ -1,5 +1,6 @@
 import { attackPlayer } from "../model/actionsSlice";
-import { damagePlayer } from "../model/gameSlice";
+import { newPlayer } from "../model/entities/Player";
+import { damageEntity } from "../model/gameSlice";
 import { AppListenerEffectAPI } from "../store";
 
 export const attackPlayerAction = {
@@ -10,7 +11,12 @@ export const attackPlayerAction = {
   ) => {
     const { dispatch } = api;
     if (target != source.owner) {
-      dispatch(damagePlayer({ player: target, amount: source.attack }));
+      dispatch(
+        damageEntity({
+          target: newPlayer({ playerType: target }),
+          amount: source.attack,
+        })
+      );
     }
   },
 };

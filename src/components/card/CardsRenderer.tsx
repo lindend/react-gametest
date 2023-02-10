@@ -1,22 +1,22 @@
 import { useSelector } from "react-redux";
-import { players } from "../../model/gameSlice";
+import { PlayerType } from "../../model/entities/Player";
 import { RootState } from "../../store";
 import { cardFacing } from "./Card";
-import CardPositioning, { cardArea } from "./CardPositioning";
+import CardPositioning, { CardArea } from "./CardPositioning";
 
 const CardsRenderer = () => {
   const handCards = useSelector(
-    (state: RootState) => state.game.players[players.player].hand
+    (state: RootState) => state.game.players[PlayerType.player].hand
   );
   const playerBoardCards = useSelector(
-    (state: RootState) => state.game.players[players.player].board
+    (state: RootState) => state.game.players[PlayerType.player].board
   );
   const opponentBoardCards = useSelector(
-    (state: RootState) => state.game.players[players.opponent].board
+    (state: RootState) => state.game.players[PlayerType.opponent].board
   );
 
   const opponentHandCards = useSelector(
-    (state: RootState) => state.game.players[players.opponent].hand
+    (state: RootState) => state.game.players[PlayerType.opponent].hand
   );
 
   return (
@@ -26,7 +26,7 @@ const CardsRenderer = () => {
           key={card.id}
           card={card}
           draggable={true}
-          area={cardArea.hand}
+          area={CardArea.hand}
           facing={cardFacing.front}
         />
       ))}
@@ -35,7 +35,7 @@ const CardsRenderer = () => {
           key={card.id}
           card={card}
           draggable={true}
-          area={cardArea.board}
+          area={CardArea.board}
           facing={cardFacing.front}
         />
       ))}
@@ -44,7 +44,7 @@ const CardsRenderer = () => {
           key={card.id}
           card={card}
           draggable={false}
-          area={cardArea.board}
+          area={CardArea.board}
           facing={cardFacing.front}
         />
       ))}
@@ -53,7 +53,7 @@ const CardsRenderer = () => {
           key={card.id}
           card={card}
           draggable={false}
-          area={cardArea.hand}
+          area={CardArea.hand}
           facing={cardFacing.back}
         />
       ))}

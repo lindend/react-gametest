@@ -2,7 +2,7 @@ import { queueAnimation } from "../animation/queueAnimation";
 import { attackCard } from "../model/actionsSlice";
 import { getCardPosition } from "../model/cardSlotSlice";
 import { cardSlotId } from "../model/entities/card";
-import { damageCard } from "../model/gameSlice";
+import { damageEntity } from "../model/gameSlice";
 import { AppListenerEffectAPI } from "../store";
 import { cardAttackAnimation } from "./animations/cardattack";
 
@@ -25,8 +25,8 @@ export const attackCardAction = {
         }
       );
       await condition(animationEnded);
-      dispatch(damageCard({ cardId: target.id, amount: source.attack }));
-      dispatch(damageCard({ cardId: source.id, amount: target.attack }));
+      dispatch(damageEntity({ target: target, amount: source.attack }));
+      dispatch(damageEntity({ target: source, amount: target.attack }));
     }
   },
 };

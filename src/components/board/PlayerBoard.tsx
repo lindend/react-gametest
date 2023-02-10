@@ -2,13 +2,13 @@ import { HTMLAttributes } from "react";
 import { useSelector } from "react-redux";
 import { cardSlotId } from "../../model/entities/card";
 import { dropTarget } from "../../model/entities/dropTarget";
-import { players } from "../../model/gameSlice";
+import { PlayerType } from "../../model/entities/Player";
 import { RootState } from "../../store";
 import CardSlot from "../card/CardSlot";
 import { SlotPositionTracker } from "../card/SlotPositionTracker";
 
 export interface PlayerBoardProps {
-  player: players;
+  player: PlayerType;
 }
 
 export const PlayerBoard = ({
@@ -22,7 +22,7 @@ export const PlayerBoard = ({
     <div
       className="bg-slate-300 opacity-40"
       {...props}
-      drop-target={player == players.player ? dropTarget.playerBoard : null}
+      drop-target={player == PlayerType.player ? dropTarget.playerBoard : null}
     >
       <SlotPositionTracker cards={cards} />
       <div

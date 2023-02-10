@@ -1,32 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { Card, cardSlotId } from "./entities/card";
-import { vector2d } from "../math/vector2d";
+import { Vector2d } from "../math/vector2d";
+import { SlotPosition } from "./entities/SlotPosition";
 
 export const mouseSlot = "slot-mouse";
 
-export interface slotPosition {
-  position: vector2d;
-  width: number;
-  height: number;
-  rotation: string;
-  zIndex: string;
+export enum DragType {
+  attackTarget,
+  playCard,
+  castSpell,
 }
 
-export enum dragType {
-  target,
-  card,
-}
-
-export type sliceState = {
-  slotPositions: { [id: string]: slotPosition };
+export type SliceState = {
+  slotPositions: { [id: string]: SlotPosition };
   isDragging: boolean;
-  dragStart?: vector2d;
-  dragType?: dragType;
+  dragStart?: Vector2d;
+  dragType?: DragType;
   draggingCard?: Card;
 };
 
-export const initialState: sliceState = {
+export const initialState: SliceState = {
   slotPositions: {},
   isDragging: false,
   dragStart: undefined,
@@ -38,7 +32,7 @@ const cardSlotSlice = createSlice({
   reducers: {
     setSlotPositions: (
       state,
-      { payload }: PayloadAction<{ id: string; position: slotPosition }[]>
+      { payload }: PayloadAction<{ id: string; position: SlotPosition }[]>
     ) => {
       for (let i of payload) {
         state.slotPositions[i.id] = i.position;
@@ -49,7 +43,7 @@ const cardSlotSlice = createSlice({
     },
     setMousePosition: (
       state,
-      { payload: { mouse } }: PayloadAction<{ mouse: vector2d }>
+      { payload: { mouse } }: PayloadAction<{ mouse: Vector2d }>
     ) => {
       state.slotPositions[mouseSlot] = {
         position: mouse,
@@ -66,9 +60,9 @@ const cardSlotSlice = createSlice({
       }: PayloadAction<{
         card?: Card;
         isDragging: boolean;
-        mousePosition: vector2d;
-        dragSource?: vector2d;
-        dragType?: dragType;
+        mousePosition: Vector2d;
+        dragSource?: Vector2d;
+        dragType?: DragType;
       }>
     ) => {
       state.draggingCard = card;

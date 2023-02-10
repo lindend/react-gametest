@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { dragType, mouseSlot } from "../../model/cardSlotSlice";
+import { DragType, mouseSlot } from "../../model/cardSlotSlice";
 import { RootState } from "../../store";
 import arrowHeadUrl from "../../../art/board/arrow_head.png";
 import arrowLineUrl from "../../../art/board/arrow_line.png";
@@ -22,7 +22,7 @@ export const DragTarget = () => {
   const drag = useSelector((state: RootState) => state.cardSlots.dragType);
   // const dragSource = { x: 100, y: 100 };
   // const mousePos = { x: 400, y: 330 };
-  if (!isDragging || !dragSource || drag != dragType.target) {
+  if (!isDragging || !dragSource || drag == DragType.playCard) {
     return <Fragment />;
   }
 

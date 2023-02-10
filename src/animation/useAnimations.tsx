@@ -21,8 +21,14 @@ export function useAnimations(entityId: string) {
   // Only displaying the first animation for now
   const animation = animations[0];
   const animationEntry = getAnimation(animation.name);
-  const animationStyle = animationEntry.properties(animation.props);
-  const animationElements = animationEntry.elements(animation.props);
+  const animationStyle = animationEntry.properties(
+    animation.props,
+    animationEntry.duration
+  );
+  const animationElements = animationEntry.elements(
+    animation.props,
+    animationEntry.duration
+  );
   const onAnimationEnd = () => {
     dispatch(animationEnded({ entity: entityId, animationId: animation.id }));
   };

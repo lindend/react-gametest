@@ -3,8 +3,8 @@ import CardSlot from "./CardSlot";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { HTMLAttributes } from "react";
-import { players } from "../../model/gameSlice";
 import { SlotPositionTracker } from "./SlotPositionTracker";
+import { PlayerType } from "../../model/entities/Player";
 
 const maxCardAngleFullHand = 8;
 
@@ -41,7 +41,7 @@ function lerp(min: number, max: number, progress: number): number {
 }
 
 export interface CardHandProps {
-  player: players;
+  player: PlayerType;
   flipped: boolean;
 }
 

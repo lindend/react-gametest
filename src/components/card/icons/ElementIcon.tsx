@@ -1,17 +1,17 @@
 import { Fragment } from "react";
-import { element } from "../../../model/entities/element";
+import { ElementType } from "../../../model/entities/element";
 import { FireIcon } from "./FireIcon";
 import { LifeIcon } from "./LifeIcon";
 
 export interface ElementIconProps {
-  e: element;
+  e: ElementType;
 }
 
 export const ElementIcon = ({ e }: ElementIconProps) => {
   switch (e) {
-    case element.fire:
+    case ElementType.fire:
       return <FireIcon />;
-    case element.life:
+    case ElementType.life:
       return <LifeIcon />;
   }
   return <Fragment />;

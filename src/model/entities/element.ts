@@ -1,32 +1,32 @@
-export enum element {
+export enum ElementType {
   fire,
   life,
   spirit,
   shadow,
 }
 
-type elementInfo = {
+type ElementInfo = {
   name: string;
   icon: string;
 };
 
-const elements: { [key in element]: elementInfo } = {
-  [element.fire]: {
+const elements: { [key in ElementType]: ElementInfo } = {
+  [ElementType.fire]: {
     name: "Fire",
     icon: "fire_icon.png",
   },
-  [element.life]: {
+  [ElementType.life]: {
     name: "Life",
     icon: "life_icon.png",
   },
-  [element.spirit]: {
+  [ElementType.spirit]: {
     name: "Spirit",
     icon: "spirit_icon.png",
   },
-  [element.shadow]: {
+  [ElementType.shadow]: {
     name: "Shadow",
     icon: "shadow_icon.png",
   },
 };
 
-export const elementName = (element: element) => elements[element].name;
+export const elementName = (element: ElementType) => elements[element].name;

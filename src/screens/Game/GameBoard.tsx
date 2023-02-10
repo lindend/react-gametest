@@ -3,9 +3,9 @@ import { CardHand } from "../../components/card/CardHand";
 import "./gameboard.css";
 import { PlayerBoard } from "../../components/board/PlayerBoard";
 import { MouseSlotPositionTracker } from "../../components/card/MouseSlotPositionTracker";
-import { Card } from "../../model/entities/card";
-import { beginGame, elementEnergy, players } from "../../model/gameSlice";
-import { element } from "../../model/entities/element";
+import { Card, newCard } from "../../model/entities/card";
+import { beginGame, ElementEnergy } from "../../model/gameSlice";
+import { ElementType } from "../../model/entities/element";
 import CardsRenderer from "../../components/card/CardsRenderer";
 import { EndTurnButton } from "../../components/board/EndTurnButton";
 import { Button } from "../../components/common/Button";
@@ -14,39 +14,43 @@ import { PlayerPortrait } from "../../components/board/PlayerPortrait";
 import defaultPortraitUrl from "../../../art/portraits/flamebender.png";
 import { CardStack } from "../../components/board/Cardstack";
 import { EnergyMeter } from "../../components/board/EnergyMeter";
-import { cardTemplate } from "../../model/entities/cardTemplate";
+import { CardTemplate } from "../../model/entities/cardTemplate";
 import { DragTarget } from "../../components/board/DragTarget";
 import { DragAndDrop } from "../../components/board/DragAndDrop";
 import { fireElemental } from "../../cards/fireElemental/fireElemental";
 import { testCard } from "../../cards/testCard/testCard";
+import { PlayerType } from "../../model/entities/Player";
+import { fireball } from "../../cards/fireball/fireball";
 
 const buildDeck = (
   startId: number,
-  owner: players,
-  templates: cardTemplate[]
+  owner: PlayerType,
+  templates: CardTemplate[]
 ) => {
   let currentId = startId;
   let deck: Card[] = [];
   for (let template of templates) {
-    deck.push({
-      id: currentId++,
-      owner,
-      ...template,
-    });
+    deck.push(
+      newCard({
+        id: currentId++,
+        owner,
+        ...template,
+      })
+    );
   }
   return deck;
 };
 
 function randomDeck(size: number) {
-  const testCards = [testCard, fireElemental];
+  const testCards = [testCard, fireElemental, fireball];
   return Array.from(
     { length: size },
     () => testCards[Math.floor(Math.random() * testCards.length)]
   );
 }
 
-function getDeckEnergy(deck: Card[]): elementEnergy[] {
-  let elements: Array<[element, number]> = [];
+function getDeckEnergy(deck: Card[]): ElementEnergy[] {
+  let elements: Array<[ElementType, number]> = [];
   for (let card of deck) {
     for (let cost of card.cost) {
       const idx = elements.findIndex((e) => e[0] == cost.element);
@@ -63,38 +67,38 @@ function getDeckEnergy(deck: Card[]): elementEnergy[] {
   elements.sort((a, b) => b[1] - a[1]);
 
   return elements.map((e) => {
-    return { element: e[0], energy: 0, maxEnergy: 0 };
+    return { element: e[0], energy: 3, maxEnergy: 3 };
   });
 }
 
 const GameBoard = () => {
   const dispatch = useDispatch();
 
-  const playerDeck = buildDeck(1, players.player, randomDeck(15));
+  const playerDeck = buildDeck(1, PlayerType.player, randomDeck(15));
   const playerDeckEnergy = getDeckEnergy(playerDeck);
-  const opponentDeck = buildDeck(10000, players.opponent, randomDeck(15));
+  const opponentDeck = buildDeck(10000, PlayerType.opponent, randomDeck(15));
   const opponentDeckEnergy = getDeckEnergy(opponentDeck);
 
   const newGameAction = () =>
     dispatch(
       beginGame({
         player: {
-          health: 20,
-          maxHealth: 20,
+          health: 40,
+          maxHealth: 40,
           portraitUrl: defaultPortraitUrl,
-          board: buildDeck(100, players.player, randomDeck(2)),
+          board: buildDeck(100, PlayerType.player, randomDeck(2)),
           deck: playerDeck,
-          hand: buildDeck(300, players.player, randomDeck(3)),
+          hand: buildDeck(300, PlayerType.player, randomDeck(3)),
           elements: playerDeckEnergy,
           surgingElement: 0,
         },
         opponent: {
-          health: 20,
-          maxHealth: 20,
+          health: 40,
+          maxHealth: 40,
           portraitUrl: defaultPortraitUrl,
-          board: buildDeck(100100, players.opponent, randomDeck(1)),
+          board: buildDeck(100100, PlayerType.opponent, randomDeck(1)),
           deck: opponentDeck,
-          hand: buildDeck(100200, players.opponent, randomDeck(4)),
+          hand: buildDeck(100200, PlayerType.opponent, randomDeck(4)),
           elements: opponentDeckEnergy,
           surgingElement: 0,
         },
@@ -116,7 +120,7 @@ const GameBoard = () => {
         {/* Opponent stuff */}
         <CardHand
           style={{ gridArea: "opp-hand" }}
-          player={players.opponent}
+          player={PlayerType.opponent}
           flipped={true}
         />
         <CardStack
@@ -127,14 +131,14 @@ const GameBoard = () => {
           style={{ gridArea: "opp-portrait" }}
           className="justify-self-center w-full"
         >
-          <PlayerPortrait player={players.opponent} />
+          <PlayerPortrait player={PlayerType.opponent} />
         </div>
         <div style={{ gridArea: "opp-energy" }}>
-          <EnergyMeter player={players.opponent} />
+          <EnergyMeter player={PlayerType.opponent} />
         </div>
         <PlayerBoard
           style={{ gridArea: "opp-board" }}
-          player={players.opponent}
+          player={PlayerType.opponent}
         />
         <div
           style={{ gridArea: "mid-divider" }}
@@ -143,7 +147,7 @@ const GameBoard = () => {
         {/* Player stuff */}
         <PlayerBoard
           style={{ gridArea: "player-board" }}
-          player={players.player}
+          player={PlayerType.player}
         />
         <div style={{ gridArea: "player-deck" }} className="flex flex-col">
           <EndTurnButton style={{ gridArea: "end-turn" }} />
@@ -153,14 +157,14 @@ const GameBoard = () => {
           style={{ gridArea: "player-portrait" }}
           className="justify-self-center w-full"
         >
-          <PlayerPortrait player={players.player} />
+          <PlayerPortrait player={PlayerType.player} />
         </div>
         <div style={{ gridArea: "player-energy" }}>
-          <EnergyMeter player={players.player} />
+          <EnergyMeter player={PlayerType.player} />
         </div>
         <CardHand
           style={{ gridArea: "player-hand" }}
-          player={players.player}
+          player={PlayerType.player}
           flipped={false}
         />
         <CardsRenderer />

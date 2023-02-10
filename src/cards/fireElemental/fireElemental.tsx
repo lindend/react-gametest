@@ -1,9 +1,9 @@
 import fireElementalPictureUrl from "./fireelemental.png";
 import { Card, cardSlotId } from "../../model/entities/card";
-import { addCardEntry, cardDbEntry } from "../../model/entities/cardDb";
-import { cardTemplate, cardType } from "../../model/entities/cardTemplate";
-import { element } from "../../model/entities/element";
-import { damageCard, getCardById } from "../../model/gameSlice";
+import { addCardEntry, CardDbEntry } from "../../model/entities/cardDb";
+import { CardTemplate, CardType } from "../../model/entities/cardTemplate";
+import { ElementType } from "../../model/entities/element";
+import { damageEntity, getCardById } from "../../model/gameSlice";
 import { AppListenerEffectAPI } from "../../store";
 import { fireElementalDamageAnimation } from "./fireElementalDamageAnimation";
 import { addAnimation } from "../../animation/animationDb";
@@ -12,12 +12,12 @@ import { getCardPosition } from "../../model/cardSlotSlice";
 
 const endOfTurnDamage = 1;
 
-export const fireElemental: cardTemplate = {
+export const fireElemental: CardTemplate = {
   templateId: "fire_elemental",
   name: "Fire elemental",
-  cost: [{ element: element.fire, amount: 2 }],
+  cost: [{ element: ElementType.fire, amount: 2 }],
   picture: fireElementalPictureUrl,
-  type: cardType.creature,
+  cardType: CardType.creature,
   health: 4,
   attack: 4,
 };
@@ -31,7 +31,7 @@ async function applyDamage(
   if (
     index >= 0 &&
     index < board.length &&
-    !board[index].cost.find((c) => c.element == element.fire)
+    !board[index].cost.find((c) => c.element == ElementType.fire)
   ) {
     const cardId = board[index].id;
     const state = api.getState();
@@ -47,17 +47,17 @@ async function applyDamage(
         }
       );
       await api.condition(animationEnded);
+      api.dispatch(
+        damageEntity({
+          target: targetCard,
+          amount: endOfTurnDamage,
+        })
+      );
     }
-    api.dispatch(
-      damageCard({
-        cardId,
-        amount: endOfTurnDamage,
-      })
-    );
   }
 }
 
-export const fireElementalCard: cardDbEntry = {
+export const fireElementalCard: CardDbEntry = {
   description: () => (
     <>
       At the end of each turn, deals <b>{endOfTurnDamage}</b> damage to adjacent

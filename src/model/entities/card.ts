@@ -1,9 +1,19 @@
-import { players } from "../gameSlice";
-import { cardTemplate } from "./cardTemplate";
+import { CardTemplate } from "./cardTemplate";
+import { Entity } from "./Entity";
+import { PlayerType } from "./Player";
 
-export interface Card extends cardTemplate {
+export const cardEntityType = "card";
+
+export interface Card extends CardTemplate, Entity {
   id: number;
-  owner: players;
+  owner: PlayerType;
+}
+
+export function newCard(props: Omit<Card, "type">): Card {
+  return {
+    type: cardEntityType,
+    ...props,
+  };
 }
 
 export const cardSlotId = (card: Card) => `card-${card.id}`;

@@ -1,0 +1,11 @@
+@keyframes fireball_cast {
+}
+
+@keyframes fireball_projectile {
+  0% {
+    translate: var(--fireball-source-position);
+  }
+  100% {
+    translate: var(--fireball-target-position);
+  }
+}

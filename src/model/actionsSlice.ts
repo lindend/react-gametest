@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { dragType } from "./cardSlotSlice";
+import { DragType } from "./cardSlotSlice";
 import { Card } from "./entities/card";
-import { players } from "./gameSlice";
+import { PlayerType } from "./entities/Player";
 
 const gameSlice = createSlice({
   name: "actions",
@@ -13,15 +13,15 @@ const gameSlice = createSlice({
         payload,
       }: PayloadAction<{
         card: Card;
-        drag: dragType;
+        drag: DragType;
         dropTargets: string[];
       }>
     ) => {},
-    endTurn(_, action: PayloadAction<{ player: players }>) {},
+    endTurn(_, action: PayloadAction<{ player: PlayerType }>) {},
     attackCard(_, action: PayloadAction<{ source: Card; target: Card }>) {},
     attackPlayer(
       _,
-      action: PayloadAction<{ source: Card; target: players }>
+      action: PayloadAction<{ source: Card; target: PlayerType }>
     ) {},
   },
 });

@@ -2,19 +2,26 @@ import { CSSProperties, Fragment } from "react";
 import { Animation } from "./Animation";
 import { AnimationProperties } from "./AnimationProperties";
 
-export type PropertyGenerator = (props: AnimationProperties) => CSSProperties;
-export type ElementGenerator = (props: AnimationProperties) => JSX.Element;
+export type PropertyGenerator<T extends AnimationProperties> = (
+  props: T,
+  duration: number
+) => CSSProperties;
+export type ElementGenerator<T extends AnimationProperties> = (
+  props: T,
+  duration: number
+) => JSX.Element;
 
 export interface AnimationDbEntry {
-  properties: PropertyGenerator;
-  elements: ElementGenerator;
+  duration: number;
+  properties: PropertyGenerator<AnimationProperties>;
+  elements: ElementGenerator<AnimationProperties>;
 }
 
 export interface AnimationRegistration<T extends AnimationProperties> {
   animation: Animation<T>;
   duration: number;
-  style: (props: T) => CSSProperties;
-  elements?: (props: T) => JSX.Element;
+  style: (props: T, duration: number) => CSSProperties;
+  elements?: (props: T, duration: number) => JSX.Element;
 }
 
 const animationDb: { [animationName: string]: AnimationDbEntry } = {};
@@ -24,6 +31,7 @@ export const getAnimation = (animationName: string) =>
 
 export function addAnimation<T extends AnimationProperties>({
   animation,
+  duration,
   style,
   elements,
 }: AnimationRegistration<T>) {
@@ -37,13 +45,14 @@ export function addAnimation<T extends AnimationProperties>({
   }
 
   animationDb[animation.name] = {
+    duration,
     properties: (props) => {
       const typedProps = props as T;
-      return style(typedProps);
+      return style(typedProps, duration);
     },
     elements: (props) => {
       const typedProps = props as T;
-      return elements!(typedProps);
+      return elements!(typedProps, duration);
     },
   };
 }

@@ -3,10 +3,15 @@ import { Card as CardEntity, cardSlotId } from "../../model/entities/card";
 import { Card, cardFacing } from "./Card";
 import type { RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { dragType, mouseSlot, setIsDragging } from "../../model/cardSlotSlice";
+import {
+  DragType as DragType,
+  mouseSlot,
+  setIsDragging,
+} from "../../model/cardSlotSlice";
 import { useAnimations } from "../../animation/useAnimations";
+import { CardType } from "../../model/entities/cardTemplate";
 
-export enum cardArea {
+export enum CardArea {
   hand,
   board,
   deck,
@@ -15,9 +20,21 @@ export enum cardArea {
 export type CardPositioningProps = {
   card: CardEntity;
   facing: cardFacing;
-  area: cardArea;
+  area: CardArea;
   draggable: boolean;
 };
+
+function getDragType(card: CardEntity, area: CardArea) {
+  if (area == CardArea.board) {
+    return DragType.attackTarget;
+  }
+
+  if (card.cardType == CardType.targetedSpell) {
+    return DragType.castSpell;
+  } else {
+    return DragType.playCard;
+  }
+}
 
 const CardPositioning = ({
   card,
@@ -34,7 +51,7 @@ const CardPositioning = ({
   const drag = useSelector((state: RootState) => state.cardSlots.dragType);
 
   const slot =
-    isDragging && drag == dragType.card ? mouseSlot : cardSlotId(card);
+    isDragging && drag == DragType.playCard ? mouseSlot : cardSlotId(card);
 
   const slotPosition = useSelector(
     (state: RootState) => state.cardSlots.slotPositions[slot]
@@ -50,13 +67,14 @@ const CardPositioning = ({
       if (!draggable) {
         return;
       }
+      const dragType = getDragType(card, area);
       dispatch(
         setIsDragging({
           card,
           isDragging: true,
           mousePosition: { x: mouseX, y: mouseY },
           dragSource: { x: mouseX, y: mouseY },
-          dragType: area == cardArea.hand ? dragType.card : dragType.target,
+          dragType: getDragType(card, area),
         })
       );
     },
@@ -81,6 +99,7 @@ const CardPositioning = ({
         absolute 
         top-0 left-0
         hover:!z-50
+        hover:scale-110
         w-0
         flex
         justify-center
@@ -89,20 +108,13 @@ const CardPositioning = ({
         style={style}
         onAnimationEnd={onAnimationEnd}
       >
-        <div className="hover:scale-110 transition-all">
-          <Card
-            card={card}
-            facing={facing}
-            onMouseDown={(ev) => startDrag(ev.clientX, ev.clientY)}
-          />
-        </div>
-        <div
-          style={{ translate: `0 ${slotPosition.height / 2}px` }}
-          className="z-[200] absolute"
-        >
-          {animationElements}
-        </div>
+        <Card
+          card={card}
+          facing={facing}
+          onMouseDown={(ev) => startDrag(ev.clientX, ev.clientY)}
+        />
       </div>
+      {animationElements}
     </>
   );
 };

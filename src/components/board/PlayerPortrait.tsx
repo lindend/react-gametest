@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 import { dropTarget } from "../../model/entities/dropTarget";
-import { players } from "../../model/gameSlice";
+import { PlayerType } from "../../model/entities/Player";
 import { RootState } from "../../store";
 import { LifeHeart } from "./LifeHeart";
 
 export interface PlayerPortraitProps {
-  player: players;
+  player: PlayerType;
 }
 
 export const PlayerPortrait = ({ player }: PlayerPortraitProps) => {

@@ -1,7 +1,7 @@
 import "./cardattack.css";
 import { radToDeg } from "../../math/math";
 import {
-  vector2d,
+  Vector2d,
   subtract,
   normalize,
   add,
@@ -13,8 +13,8 @@ import { AnimationRegistration } from "../../animation/animationDb";
 const pullBackLength = 50;
 
 export interface CardAttackAnimationProperties extends AnimationProperties {
-  cardPosition: vector2d;
-  targetPosition: vector2d;
+  cardPosition: Vector2d;
+  targetPosition: Vector2d;
 }
 const duration = 0.6;
 export const cardAttackAnimation: AnimationRegistration<CardAttackAnimationProperties> =
