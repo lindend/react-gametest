@@ -5,7 +5,31 @@
   0% {
     translate: var(--fireball-source-position);
   }
+  50% {
+    translate: var(--fireball-target-position);
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
   100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fireball_splash {
+  0% {
+    opacity: 0;
+    translate: var(--fireball-target-position);
+  }
+  50% {
+    opacity: 0;
+  }
+  51% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
     translate: var(--fireball-target-position);
   }
 }
